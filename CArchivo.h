@@ -12,9 +12,12 @@ class CArchivo{
     public:
         CArchivo(string nombre);
         string setNombre();
+        string Split(string cadena, char c);
+        bool validaArchivo();
         
         
 
 };
 
 #endif
+

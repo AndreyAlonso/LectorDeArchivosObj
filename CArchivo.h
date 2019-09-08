@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -14,10 +15,10 @@ class CArchivo{
         string setNombre();
         string Split(string cadena, char c);
         bool validaArchivo();
+        int abreArchivo();
         
         
 
 };
 
 #endif
-

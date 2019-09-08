@@ -34,14 +34,15 @@ bool CArchivo::validaArchivo()
 
 /*
  * Metodo Split()
- * @param: archivo :    nombre del archivo 
- * @param: c:           caracter donde se realiza la separacion de la cadena
+ * @archivo :    nombre del archivo 
+ * @c:           caracter donde se realiza la separacion de la cadena
  * 
  * Se recorre el nombre de archivo, caracter por caracter hasta encontrar el deseado.
- * regresa todo lo que contiene la cadena despues del caracter encontrado
+ * Regresa todo lo que contiene la cadena despues del caracter encontrado
  */
 string CArchivo::Split(string archivo, char c)
 {
+    cout << "Nombre" << archivo << endl;
     int i;
     bool band = false;
     string extension = "";
@@ -53,4 +54,21 @@ string CArchivo::Split(string archivo, char c)
             extension += archivo[i];
     }
     return extension;
+}
+
+/*************************************************************
+ * Metodo abreArchivo
+ * 1. Verifica que el archivo existe en el directorio
+ * 2. Si existe, entonces lo abre
+ *************************************************************/
+int CArchivo::abreArchivo()
+{
+    ifstream archivo;
+    archivo.open(nombreArchivo);
+    if(archivo.fail())
+    {
+        cout << "ERROR: No se pudo abrir el archivo "<< endl;
+        return -1;
+    }
+    archivo.close();
 }

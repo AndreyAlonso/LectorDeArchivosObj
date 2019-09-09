@@ -20,7 +20,7 @@ class CArchivo{
         bool validaArchivo();
         int abreArchivo();
         void capturaVertices(string renglon);
-        void separaRenglon(string renglon);
+        list<float> separaRenglon(string renglon);
 };
 
 #endif

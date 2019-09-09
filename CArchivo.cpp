@@ -1,4 +1,5 @@
 #include "Headers/CArchivo.h"
+#include "CVertice.cpp"
 
 /*
  * Constructor de la Clase CArchivo
@@ -80,25 +81,37 @@ int CArchivo::abreArchivo()
        }
     }
     archivo.close();
+
+    for(CVertice v: vertices)
+        cout << v.muestraCoordenada() << endl;
 }
 /**
  * Metodo capturaVertices()
  * @renglon:    Linea obtenida del archivo
+ * return:      Lista de flotantes, se asignan al vertice
  * Lee el archivo y va guardando en una lista de vertices
  * los vertices  obtenidos del archivo.
  */
 void CArchivo::capturaVertices(string renglon)
 {
-    CVertice *vertice;
+    list<float> puntos;
+    float x,y,z;
     switch(renglon[0])
     {
         case 'o':
             cout << "OBJETO: " << renglon << endl;
         break;
         case 'v':
-            cout << "VERTICE: " << renglon << endl;
-            separaRenglon(renglon);
-
+           // cout << "VERTICE: " << renglon << endl;
+            puntos = separaRenglon(renglon);
+            x = puntos.front();
+            puntos.pop_front();
+            y = puntos.front();
+            puntos.pop_front();
+            z = puntos.front();
+            puntos.pop_front();
+            //cout << "\t\tVALOR DE X{" << x << "} Y{"<< y << "} Z{"<< z <<  "}"<< endl;
+            vertices.insert(vertices.end(),CVertice(x,y,z));
         break;
         case 'f':
             cout << "CARA: " << renglon << endl;
@@ -116,7 +129,7 @@ void CArchivo::capturaVertices(string renglon)
  * Se obtienen las coordenadas x, y, z y se 
  * guardan en una lista 
  */
-void CArchivo::separaRenglon(string renglon)
+list<float> CArchivo::separaRenglon(string renglon)
 {
     int i;
     string dato = ""; 
@@ -147,4 +160,5 @@ void CArchivo::separaRenglon(string renglon)
     cout << "\n\nLISTA DE VERTICES" << endl;
     for(float f: coordenadas)
         cout << f << endl;
+    return coordenadas;
 }

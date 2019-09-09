@@ -1,10 +1,11 @@
 /***********************************************************************************************
- * Proyecto:    Lector de Archivos WaveFrame (.obj)
+ * Proyecto:    Lector de Archivos WaveFront (.obj)
  * Fecha:       01/09/2019
  * Autor:       Hector Andrey Hernandez Alonso
+ * Clases:      CArchivo, CCara, CVertice, CGrafico
  ***********************************************************************************************/
-#include "CArchivo.cpp" //Clase CArchivo
-
+#include "Headers/CArchivo.h" //Clase CArchivo
+#include "CArchivo.cpp"
 #include <iostream>
 #include <string> 
 #include <fstream>
@@ -12,8 +13,8 @@
 using namespace std;
 
 /*Variable global*/
-
 string nArchivo;
+
 /*  Prototipos de las funciones */
 void encabezado();
 void pie();
@@ -25,9 +26,7 @@ int main()
     encabezado();
     if(pideArchivo())
     {
-
         CArchivo archivo(nArchivo);//Creacion de objeto de la clase CArchivo
-
         if(archivo.validaArchivo())
         {
             cout << "El archivo si tiene extension .obj" << endl;

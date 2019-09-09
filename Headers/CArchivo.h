@@ -4,21 +4,23 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "CVertice.h"
+#include <list>
 
 using namespace std;
 
 class CArchivo{
     private:
         string nombreArchivo;
+        list<CVertice> vertices;
     public:
         CArchivo(string nombre);
         string setNombre();
         string Split(string cadena, char c);
         bool validaArchivo();
         int abreArchivo();
-        
-        
-
+        void capturaVertices(string renglon);
+        void separaRenglon(string renglon);
 };
 
 #endif

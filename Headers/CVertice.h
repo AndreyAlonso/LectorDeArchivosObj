@@ -9,7 +9,7 @@ class CVertice
         CVertice(float x, float y, float z);
 
 
-}
+};
 
 
 #endif  

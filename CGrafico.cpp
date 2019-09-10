@@ -47,17 +47,33 @@ void display()
 {
     //  Borrar pantalla y Z-bufferg
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-  // Resetear transformaciones
   glLoadIdentity();
+   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+  glViewport(0,0,250,250);
+  // Resetear transformaciones
+  
   glColor3f( 1.0, 0.0, 1.0 );
-  glBegin(GL_POLYGON);
-  cout << "DISPLAY" << endl;
-    for(CVertice  vd: v){
-        glVertex3f(vd.x,vd.y,vd.z);
-        cout << vd.muestraCoordenada() << endl;
+ 
+  for(CCara cc: c)
+  {
+      for(int  i: cc.VERTICES()){
+          glBegin(GL_POLYGON);
+          for(CVertice vc: v)
+          {
+            glVertex3f(vc.x,vc.y,vc.z);
+          }
+
+           glEnd();
+     //   glVertex3f(vd.x,vd.y,vd.z);
     }
+  }
+ 
+  //cout << "DISPLAY" << endl;
+  
+    
         
-  glEnd();
+ 
   
  
   glFlush();
@@ -82,9 +98,27 @@ void CGrafico::pinta(int argc, char* argv[])
     
     // Funciones de retrollamada
     v = vertices;
+    c = caras;
     glutDisplayFunc(display);
-
+    glutSpecialFunc(specialKeys);
     //  Pasar el control de eventos a GLUT
     glutMainLoop();
 
+}
+
+void specialKeys( int key, int x, int y ) {
+
+  if (key == GLUT_KEY_RIGHT)
+    rotate_y += 5;
+  else if (key == GLUT_KEY_LEFT)
+    rotate_y -= 5;
+ 
+  else if (key == GLUT_KEY_UP)
+    rotate_x += 5;
+ 
+  else if (key == GLUT_KEY_DOWN)
+    rotate_x -= 5;
+  glutPostRedisplay();
+  
+ 
 }

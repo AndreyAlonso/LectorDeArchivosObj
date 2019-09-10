@@ -11,8 +11,15 @@
 #include <GL/glut.h>
 #include "CCara.h"
 
+double rotate_y=0; 
+double rotate_x=0;
+
+
 list<CVertice> v;
+list<CCara> c;
 void display();
+void specialKeys( int key, int x, int y );
+
 class CGrafico{
     private:
        

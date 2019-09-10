@@ -1,6 +1,7 @@
 #include "Headers/CArchivo.h"
 #include "CVertice.cpp"
-
+#include "CCara.cpp"
+#include "CGrafico.cpp"
 /*
  * Constructor de la Clase CArchivo
  * nombre -> nombre del arhivo dado por el usuario
@@ -81,9 +82,14 @@ int CArchivo::abreArchivo()
        }
     }
     archivo.close();
-
-    for(CVertice v: vertices)
-        cout << v.muestraCoordenada() << endl;
+    
+    grafo.dameVertices(vertices);
+    grafo.dameCaras(faces);
+    grafo.muestraVertices();
+    grafo.muestraCaras();
+    cout << "Se procede a pintar" << endl;
+    
+    
 }
 /**
  * Metodo capturaVertices()
@@ -95,6 +101,8 @@ int CArchivo::abreArchivo()
 void CArchivo::capturaVertices(string renglon)
 {
     list<float> puntos;
+    list<int>   caras;
+    CCara* objeto;
     float x,y,z;
     switch(renglon[0])
     {
@@ -102,7 +110,6 @@ void CArchivo::capturaVertices(string renglon)
             cout << "OBJETO: " << renglon << endl;
         break;
         case 'v':
-           // cout << "VERTICE: " << renglon << endl;
             puntos = separaRenglon(renglon);
             x = puntos.front();
             puntos.pop_front();
@@ -110,11 +117,13 @@ void CArchivo::capturaVertices(string renglon)
             puntos.pop_front();
             z = puntos.front();
             puntos.pop_front();
-            //cout << "\t\tVALOR DE X{" << x << "} Y{"<< y << "} Z{"<< z <<  "}"<< endl;
             vertices.insert(vertices.end(),CVertice(x,y,z));
         break;
         case 'f':
-            cout << "CARA: " << renglon << endl;
+            caras = obtenCara(renglon);
+            objeto = new CCara(caras);
+            faces.insert(faces.end(),*objeto);
+
         break;
         default:
             cout << "NO ES NINGUNO" << endl;
@@ -134,10 +143,10 @@ list<float> CArchivo::separaRenglon(string renglon)
     int i;
     string dato = ""; 
     float pos;
-    list<float> coordenadas;
+    list<float> coordenadas;    
     for(i = 0; i < renglon.length(); i++)
     {
-        if(renglon[i] != 'v')
+        if(renglon[i] != 'v' && renglon[0] != '#' && renglon[i+1] != 'n'&& renglon[0] != 'm' && renglon[0] != 's')
         {
             if(renglon[i] != ' ')
             {   
@@ -150,15 +159,54 @@ list<float> CArchivo::separaRenglon(string renglon)
                 dato = "";
             }           
         }
-        
     }
     if(!dato.empty()) //Si el dato no esta vacio, se agrega a la lista de coordenadas
     {
         pos = stof(dato);
         coordenadas.insert(coordenadas.end(),pos);
     }    
-    cout << "\n\nLISTA DE VERTICES" << endl;
+   /* cout << "\n\nLISTA DE VERTICES" << endl;
     for(float f: coordenadas)
-        cout << f << endl;
+        cout << f << endl;*/
     return coordenadas;
+}
+/**
+ * Metodo obtenCara(string renglon)
+ * @renglon:    renglon obtenido del archivo
+ * return:  lista de los vertices obtenidos en una cara
+ *
+ **/
+list<int> CArchivo::obtenCara(string renglon)
+{
+    int i;
+    string dato = ""; 
+    float pos;
+    list<int> coordenadas;    
+    for(i = 0; i < renglon.length(); i++)
+    {
+        if(renglon[i] != 'f' && renglon[0] != '#' && renglon[i+1] != 'n'&& renglon[0] != 'm' && renglon[0] != 's')
+        {
+            if(renglon[i] != ' ')
+            {   
+                dato += renglon[i];
+            }
+            else if(renglon[i] == ' ' && dato != "")
+            {
+                pos = stoi(dato);
+                coordenadas.insert(coordenadas.end(),pos);
+                dato = "";
+            }           
+        }
+    }
+    if(!dato.empty()) //Si el dato no esta vacio, se agrega a la lista de coordenadas
+    {
+        pos = stoi(dato);
+        coordenadas.insert(coordenadas.end(),pos);
+    }    
+    return coordenadas;
+}
+
+CGrafico CArchivo::setGrafico()
+{
+    return grafo;
 }

@@ -21,8 +21,9 @@ void pie();
 bool pideArchivo();
 
 
-int main()
+int main(int argc, char* argv[])
 {
+    //cout << argc;
     encabezado();
     if(pideArchivo())
     {
@@ -32,6 +33,7 @@ int main()
             cout << "El archivo si tiene extension .obj" << endl;
             if(archivo.abreArchivo() != -1)
             {
+                archivo.setGrafico().pinta(argc,argv);
                 cout << "hasta ahora todo bien";
             }
         }

@@ -96,6 +96,7 @@ void CGrafico::pinta(int argc, char* argv[])
     glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
     glutMainLoop();
 
+    
 }
 
 /**
@@ -121,14 +122,16 @@ void specialKeys( int key, int x, int y ) {
  
 }
 
+
+
 /**
  * Destructor de la clase CGrafico
  * Se vacia el arreglo y las listas
  */
 CGrafico::~CGrafico()
 {
-  delete [] array;
-  v.clear();
-  c.clear();
+   // delete[] array ;
+//  v.clear();
+//  c.clear();
   cout << "DEsTRUCTOR" << endl;
 }

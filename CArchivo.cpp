@@ -88,6 +88,7 @@ int CArchivo::abreArchivo()
     //grafo.muestraVertices();
     //grafo.muestraCaras();
     //cout << "Se procede a pintar" << endl;
+    
 }
 /**
  * Metodo capturaVertices()
@@ -123,7 +124,7 @@ void CArchivo::capturaVertices(string renglon)
             faces.insert(faces.end(),*objeto);
 
         break;
-        default:
+       // default:
             //cout << "NO ES NINGUNO" << endl;
     }
 

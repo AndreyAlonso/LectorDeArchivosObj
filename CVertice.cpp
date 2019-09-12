@@ -16,7 +16,7 @@ CVertice::CVertice(float x, float y, float z)
 
 CVertice::CVertice()
 {
-    cout << "\t\tDENTRO DEconstructor" << endl;
+    //cout << "\t\tDENTRO DEconstructor" << endl;
 }
 /*******************
  *******************/

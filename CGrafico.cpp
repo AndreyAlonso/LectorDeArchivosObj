@@ -1,6 +1,4 @@
 #include "Headers/CGrafico.h"
-
-
 /****************************************************
  * CGrafico()
  * Constructor de la clase CGrafico
@@ -10,15 +8,17 @@ CGrafico::CGrafico()
 {
     
 }
-
-
 /**
  * Metodo dameVertices(list<CVertice> vertices)
  * @vertices: lista de vertices obtenidas del archivo
  */
 void CGrafico::dameVertices(list<CVertice> vertices)
 {
-    this->vertices = vertices;
+  int j = 1;
+  this->vertices = vertices;
+  array[vertices.size()];
+  for(CVertice cv: vertices)   //Se guarda en un arreglo los vertices para poder pintarlos
+    array[j++] = cv; 
 }
 
 /**
@@ -30,82 +30,80 @@ void CGrafico::dameCaras(list<CCara> caras)
     this->caras = caras;
 }
 
+/**
+ * Metoodo muestraVertices()
+ * Muestra en pantalla las coordenadas (x,y,z)  del vertice
+ */
 void CGrafico::muestraVertices()
 {
     cout << "LOS VERTICES DEL GRAFO SON" << endl;
     for(CVertice v: vertices)
         cout << v.muestraCoordenada() << endl;
 }
-
+/**
+ * Metodo muestraCaras()
+ * Muestra en pantalla los vertices que tiene la cara
+ */
 void CGrafico::muestraCaras()
 {
     cout << "LAS CARAS DEL GRAFO SON" << endl;
     for(CCara c: caras)
         cout << c.muestraCara() << endl;
 }
+/**
+ * Funcion display()
+ * Aqui se realiza el pintado de las figuras
+ */
 void display()
 {
-    //  Borrar pantalla y Z-bufferg
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_x, 1.0, 0.0, 0.0 );
   glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glViewport(0,0,250,250);
-  // Resetear transformaciones
   
+  glBegin(GL_POLYGON);
   glColor3f( 1.0, 0.0, 1.0 );
- 
   for(CCara cc: c)
   {
-      for(int  i: cc.VERTICES()){
-          glBegin(GL_POLYGON);
-          for(CVertice vc: v)
-          {
-            glVertex3f(vc.x,vc.y,vc.z);
-          }
-
-           glEnd();
-     //   glVertex3f(vd.x,vd.y,vd.z);
-    }
+    for(int i: cc.VERTICES())
+      glVertex3f(array[i].x,array[i].y,array[i].z);  
   }
- 
-  //cout << "DISPLAY" << endl;
-  
-    
-        
- 
-  
- 
+  glEnd();
   glFlush();
   glutSwapBuffers();
 }
-
-
-
+/**
+ * Metodo pinta(int argc, char *argv[])
+ * Se crea la ventana de OpenGL
+ * Se manda llamar a las funciones para interactuar con la ventana OpenGL
+ */
 void CGrafico::pinta(int argc, char* argv[])
 {
-
-    glutInit(&argc,argv);
-    
+    glutInit(&argc,argv);   
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(400,0);
     glutInitWindowSize( 400, 400);
-    
-    glutCreateWindow("Piramide");
-    
+  
+    glutCreateWindow("Lector de Archivos WaveFront (.obj)");
     //  Habilitar la prueba de profundidad de Z-buffer
     glEnable(GL_DEPTH_TEST);
-    
-    // Funciones de retrollamada
-    v = vertices;
-    c = caras;
-    glutDisplayFunc(display);
-    glutSpecialFunc(specialKeys);
-    //  Pasar el control de eventos a GLUT
+
+    v = vertices; //Se guardan los vertices en una lista global
+    c = caras;    //Se guardan las caras en una lista global
+
+    glutDisplayFunc(display);     //Llamada a la funcion display()
+    glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
     glutMainLoop();
 
 }
 
+/**
+ * Funcion specialKeys(int key, int x, int y)
+ * @key:  tecla pulsada
+ * @x:    coordenada en el eje x
+ * @y:    coordenada en el eje y
+ */
 void specialKeys( int key, int x, int y ) {
 
   if (key == GLUT_KEY_RIGHT)
@@ -121,4 +119,16 @@ void specialKeys( int key, int x, int y ) {
   glutPostRedisplay();
   
  
+}
+
+/**
+ * Destructor de la clase CGrafico
+ * Se vacia el arreglo y las listas
+ */
+CGrafico::~CGrafico()
+{
+  delete [] array;
+  v.clear();
+  c.clear();
+  cout << "DEsTRUCTOR" << endl;
 }

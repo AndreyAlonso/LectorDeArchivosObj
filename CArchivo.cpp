@@ -85,11 +85,9 @@ int CArchivo::abreArchivo()
     
     grafo.dameVertices(vertices);
     grafo.dameCaras(faces);
-    grafo.muestraVertices();
-    grafo.muestraCaras();
-    cout << "Se procede a pintar" << endl;
-    
-    
+    //grafo.muestraVertices();
+    //grafo.muestraCaras();
+    //cout << "Se procede a pintar" << endl;
 }
 /**
  * Metodo capturaVertices()
@@ -107,7 +105,7 @@ void CArchivo::capturaVertices(string renglon)
     switch(renglon[0])
     {
         case 'o':
-            cout << "OBJETO: " << renglon << endl;
+            //cout << "OBJETO: " << renglon << endl;
         break;
         case 'v':
             puntos = separaRenglon(renglon);
@@ -126,8 +124,7 @@ void CArchivo::capturaVertices(string renglon)
 
         break;
         default:
-            cout << "NO ES NINGUNO" << endl;
-
+            //cout << "NO ES NINGUNO" << endl;
     }
 
 }
@@ -165,9 +162,7 @@ list<float> CArchivo::separaRenglon(string renglon)
         pos = stof(dato);
         coordenadas.insert(coordenadas.end(),pos);
     }    
-   /* cout << "\n\nLISTA DE VERTICES" << endl;
-    for(float f: coordenadas)
-        cout << f << endl;*/
+
     return coordenadas;
 }
 /**

@@ -14,19 +14,12 @@ CGrafico::CGrafico()
  */
 void CGrafico::dameVertices(list<CVertice> vertices)
 {
-  long j = 0;
+  int j = 1;
   this->vertices = vertices;
-  //cout << "El tamaño de la lista es\t" << vertices.size() << endl;
-  array = (CVertice*)malloc(sizeof(CVertice)*vertices.size()+1);
   //array[vertices.size()];
+  array = (CVertice*)malloc(sizeof(CVertice)*(vertices.size()+1));
   for(CVertice cv: vertices)   //Se guarda en un arreglo los vertices para poder pintarlos
-  { 
-    array[j] = cv;
-    j++;
-  }
-    
-
-  cout << "valor final de j\t" << j << endl;
+    array[j++] = cv; 
 }
 
 /**
@@ -69,14 +62,17 @@ void display()
   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
   glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glViewport(0,0,250,250);
-  glBegin(GL_POLYGON);
+  
+  
   glColor3f( 1.0, 0.0, 1.0 );
   for(CCara cc: c)
   {
-    for(long i: cc.VERTICES())
+    glBegin(GL_POLYGON);
+    for(int i: cc.VERTICES())
       glVertex3f(array[i].x,array[i].y,array[i].z);  
+    glEnd();
   }
-  glEnd();
+  
   glFlush();
   glutSwapBuffers();
 }

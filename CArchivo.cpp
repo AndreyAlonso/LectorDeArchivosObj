@@ -82,11 +82,9 @@ int CArchivo::abreArchivo()
        }
     }
     archivo.close();
-    cout << "\t\t\tYa obtuve los vertices" << endl;
-    grafo.dameVertices(vertices);
     
+    grafo.dameVertices(vertices);
     grafo.dameCaras(faces);
-    cout << "Estoy en linea 88" << endl;
     //grafo.muestraVertices();
     //grafo.muestraCaras();
     //cout << "Se procede a pintar" << endl;
@@ -102,7 +100,7 @@ int CArchivo::abreArchivo()
 void CArchivo::capturaVertices(string renglon)
 {
     list<float> puntos;
-    list<long>   caras;
+    list<int>   caras;
     CCara* objeto;
     float x,y,z;
     switch(renglon[0])
@@ -174,62 +172,33 @@ list<float> CArchivo::separaRenglon(string renglon)
  * return:  lista de los vertices obtenidos en una cara
  *
  **/
-list<long> CArchivo::obtenCara(string renglon)
+list<int> CArchivo::obtenCara(string renglon)
 {
     int i;
-    int j;
     string dato = ""; 
     float pos;
-    bool existe = false;
-    list<long> coordenadas;    
+    list<int> coordenadas;    
     for(i = 0; i < renglon.length(); i++)
     {
         if(renglon[i] != 'f' && renglon[0] != '#' && renglon[i+1] != 'n'&& renglon[0] != 'm' && renglon[0] != 's')
         {
-            if(renglon[i] != ' ' && renglon[i] != '/')
+            if(renglon[i] != ' ')
             {   
                 dato += renglon[i];
             }
-            else if((renglon[i] == ' '  || renglon[i] == '/') &&  dato != "")
+            else if(renglon[i] == ' ' && dato != "")
             {
-                
-                pos = stol(dato);
-                j = 0;
-                for(int aux: coordenadas)
-                {
-
-                    if(aux == pos)
-                    {
-                        existe = true;
-                        break;
-                    }
-                    else{
-                        existe = false;
-                    }
-                    
-                    
-                }
-                if(!existe)
-                    coordenadas.insert(coordenadas.end(),pos);
+                pos = stoi(dato);
+                coordenadas.insert(coordenadas.end(),pos);
                 dato = "";
             }           
         }
-        
     }
     if(!dato.empty()) //Si el dato no esta vacio, se agrega a la lista de coordenadas
     {
-        pos = stol(dato);
+        pos = stoi(dato);
         coordenadas.insert(coordenadas.end(),pos);
     }    
-
-    cout << "vertices totales: " << vertices.size() << endl;
-    for(int cont: coordenadas)
-    {
-            cout <<"f: " << cont;
-    }
-            
-        cout << "\t\tTHE END" << endl;
-        //cout << "au au au";
     return coordenadas;
 }
 

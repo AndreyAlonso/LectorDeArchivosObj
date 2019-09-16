@@ -17,8 +17,8 @@ double rotate_x=0;
 
 list<CVertice> v;
 list<CCara> c;
-CVertice *array;
-
+//CVertice array[10000];
+CVertice* array;
 // Prototipos de las funciones de OpenGL
 void display();
 void specialKeys( int key, int x, int y );

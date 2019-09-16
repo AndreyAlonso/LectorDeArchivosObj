@@ -50,6 +50,8 @@ void menu(int argc, char* argv[])
         cout << "1) Leer archivo" << endl;
         cout << "2) Muestra archivos directorio" << endl;
         cout << "3) Salir" << endl;
+        cout << "-------------------------------------------------" << endl;
+        cout << "Opcion = ";
         cin >> opcion;
         switch(opcion)
         {

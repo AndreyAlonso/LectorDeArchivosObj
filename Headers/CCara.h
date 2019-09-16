@@ -9,10 +9,10 @@ using namespace std;
 
 class CCara{
     private:
-        list<int> vertices;
+        list<long> vertices;
     public:
-        CCara(list<int> vertices);
-        list<int> VERTICES();
+        CCara(list<long> vertices);
+        list<long> VERTICES();
         string muestraCara();
         ~CCara();
 };

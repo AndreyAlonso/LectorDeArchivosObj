@@ -5,7 +5,7 @@
  * @vertices    Lista de int donde que contiene los vertices
  * 
  **/
-CCara::CCara(list<int> vertices)
+CCara::CCara(list<long> vertices)
 {
     this->vertices = vertices;
 }
@@ -16,14 +16,14 @@ CCara::CCara(list<int> vertices)
  **/
 CCara::~CCara()
 {
-    vertices.empty();
+    //vertices.empty();
 }
 
 /**
  * Metodo VERTICES()
  * return   lista de vertices
  */
-list<int> CCara::VERTICES()
+list<long> CCara::VERTICES()
 {
     return vertices;
 }
@@ -31,7 +31,7 @@ list<int> CCara::VERTICES()
 string CCara::muestraCara()
 {
     string dato = "";
-    for(int i: vertices)
+    for(long i: vertices)
         dato +=  to_string(i) + " ";
     return dato;
 }

@@ -25,7 +25,7 @@ class CArchivo{
         int abreArchivo();
         void capturaVertices(string renglon);
         list<float> separaRenglon(string renglon);
-        list<int> obtenCara(string renglon);
+        list<long> obtenCara(string renglon);
         CGrafico setGrafico();
 };
 

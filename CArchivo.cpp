@@ -9,7 +9,7 @@
  */
 CArchivo::CArchivo(string nombre)
 {
-    nombreArchivo = nombre;
+    nombreArchivo = "archivos/" + nombre;
 }
 
 /*

@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
 }
 
 bool pideArchivo(){
+    encabezado();
     cout << "Escriba el nombre del archivo: ";
     cin >> nArchivo;
     if(nArchivo != "" || nArchivo != " ")
@@ -81,7 +82,7 @@ void menu(int argc, char* argv[])
             case 2:
                 system("clear");
                 cout << "Archivos en el directorio: \n" << endl;
-                system("ls -1 *.obj");
+                system("ls -1 archivos/*.obj");
                 cout << "\n" << endl;
             break;
             default:

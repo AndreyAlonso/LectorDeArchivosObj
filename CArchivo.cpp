@@ -109,6 +109,8 @@ void CArchivo::capturaVertices(string renglon)
             //cout << "OBJETO: " << renglon << endl;
         break;
         case 'v':
+        if(renglon[1] == ' ')
+        {
             puntos = separaRenglon(renglon);
             x = puntos.front();
             puntos.pop_front();
@@ -117,12 +119,17 @@ void CArchivo::capturaVertices(string renglon)
             z = puntos.front();
             puntos.pop_front();
             vertices.insert(vertices.end(),CVertice(x,y,z));
+        }
+            
         break;
         case 'f':
+        if(renglon[1] == ' ')
+        {
             caras = obtenCara(renglon);
             objeto = new CCara(caras);
             faces.insert(faces.end(),*objeto);
-
+        }
+            
         break;
        // default:
             //cout << "NO ES NINGUNO" << endl;

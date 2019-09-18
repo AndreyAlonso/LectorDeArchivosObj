@@ -97,7 +97,7 @@ void menu(int argc, char* argv[])
 void encabezado()
 {
     cout << "-------------------------------------------------";
-    cout << "\n\tLECTOR DE ARCHIVOS WAVEFRAME\t (.obj)" << endl;
+    cout << "\n\tLECTOR DE ARCHIVOS WAVEFRONT\t (.obj)" << endl;
     cout << "-------------------------------------------------" << endl;
 }
 /*Pie de pagina del programa ejecutable*/

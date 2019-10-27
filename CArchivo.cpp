@@ -148,6 +148,7 @@ list<float> CArchivo::separaRenglon(string renglon)
     int i;
     string dato = ""; 
     float pos;
+    string dd;
     list<float> coordenadas;    
     for(i = 0; i < renglon.length(); i++)
     {

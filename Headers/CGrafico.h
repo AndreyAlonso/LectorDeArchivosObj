@@ -17,7 +17,7 @@
 double rotate_y=0;  //Rotar la figura en Y
 double rotate_x=0;  //Rotar la figura en X
 CBezier b1,b2,b3;   //Curvas bezier
-float t = 0;        //Variable auxiliar para realizacion del bezier
+double t = 0;        //Variable auxiliar para realizacion del bezier
 list<CVertice> v;   //Lista global de los vertices obtenidos del archivo obj
 list<CCara> c;      //Lista global de las caras obtenidas del archivo oj
 list<Punto> lCurva; //Lista global que contiene los puntos (x,y,z) del bezier
@@ -28,8 +28,11 @@ void display();
 void specialKeys( int key, int x, int y );
 void recorreBezier();
 void pintaBezier();
+void pintaFigura();
 void traslacionOrigen();
+void dameVertices(list<CVertice> vertices);
 CVertice  multMatriz4x1(CVertice punto,Punto p);
+bool existeEnLista(list<int> lista, int busca);
 
 Punto damePivote(Punto p);
 Punto damePivote();

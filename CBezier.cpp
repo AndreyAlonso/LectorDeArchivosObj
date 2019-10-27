@@ -50,10 +50,7 @@ Punto CBezier::dameP4()
 
 float CBezier::obtenX(float t)
 {
-    return (pow((1-t),3)* this->dameP1().x) + 
-            (3*t*pow((1-t),2)* this->dameP2().x) +
-            (3 * pow(t,2)*(1-t)*this->dameP3().x ) +
-            pow(t,3)* this->dameP4().x;
+    return (pow((1-t),3)* this->dameP1().x) + (3*t*pow((1-t),2)* this->dameP2().x) + (3 * pow(t,2)*(1-t)*this->dameP3().x ) + pow(t,3)* this->dameP4().x;
 }
 float CBezier::obtenY(float t)
 {

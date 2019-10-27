@@ -24,9 +24,9 @@ CGrafico::CGrafico()
 
 
   b1.creaP1(  0.0, 0.0, 0.0 );
-  b1.creaP2(  2.0, 3.0, 0.0 );
-  b1.creaP3(  4.0, 3.0, 0.0 );
-  b1.creaP4(  8.0, 0.0, 0.0 );
+  b1.creaP2(  0.2, 0.2, 0.0 );
+  b1.creaP3(  0.2, 0.2, 0.0 );
+  b1.creaP4(  0.4, 0.0, 0.0 );
 
   // b2.creaP1(b1.dameP4().x,b1.dameP4().y,b1.dameP4().z);
   // b2.creaP2(0.2,-0.2,0.0);
@@ -49,7 +49,7 @@ CGrafico::CGrafico()
  */
 void CGrafico::dameVertices(list<CVertice> vertices)
 {
-  int j = 1;
+  long j = 1;
   this->vertices = vertices;
   //array[vertices.size()];
   array = (CVertice*)malloc(sizeof(CVertice)*(vertices.size()+1));
@@ -57,6 +57,15 @@ void CGrafico::dameVertices(list<CVertice> vertices)
     array[j++] = cv; 
 }
 
+void dameVertices(list<CVertice> vertices)
+{
+  long j = 1;
+  v = vertices;
+  //array[vertices.size()];
+  array = (CVertice*)malloc(sizeof(CVertice)*(vertices.size()+1));
+  for(CVertice cv: v)   //Se guarda en un arreglo los vertices para poder pintarlos
+    array[j++] = cv; 
+}
 /**
  * Metodo dameCaras(list<Caras> caras)
  * @caras:  lista de caras obtenidas del archivo
@@ -98,15 +107,12 @@ void display()
   // glRotatef( rotate_x, 1.0, 0.0, 0.0 );
   // glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   // glViewport(0,0,250,250);
- //  pintaBezier();
   if(bandera)
   {
-
+      pintaBezier();
       recorreBezier();
       bandera = false;
   }
-  
-  
   glFlush();
   glutSwapBuffers();
 }
@@ -118,47 +124,54 @@ void display()
 void pintaBezier()
 {
   for(Punto bezier: lCurva)
-    {
-      glBegin(GL_POINTS);
-      glVertex3f(bezier.x,bezier.y,bezier.z);
-      glEnd();
-    }
+  {
+    glBegin(GL_POINTS);
+    glVertex3f(bezier.x,bezier.y,bezier.z);
+    glEnd();
+  }
+  
 }
+void pintaFigura()
+{
+  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
+  for(CCara caraFigura : c) //Se recorren todas las caras de la figura
+  {
+    glBegin(GL_POLYGON);
+    for(int iPunto : caraFigura.VERTICES())
+    {
+      glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z); 
+    }
+    glEnd(); 
+  }
+  glFlush();
+  glutSwapBuffers();
+}
+
 /**
  * Se recorre la lista lCurva, contiene todos los puntos del bezier
  */
 void recorreBezier()
-{
+{ 
   for(Punto pBezier : lCurva)
   {
+    list<int> existe;
     traslacionOrigen();
-    // glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    // glLoadIdentity();
-    
-    //pivote = damePivote(pBezier);
     for(CCara caraFigura : c) //Se recorren todas las caras de la figura
-    {   
-      glBegin(GL_POLYGON); 
-      glColor3f( 1.0, 0.0, 1.0 );
-      for(int iPunto : caraFigura.VERTICES()) //Se recorren todos los puntos que tiene 1 cara
+    {  
+       for(int iPunto : caraFigura.VERTICES()) //Se recorren todos los puntos que tiene 1 cara
       {
-        //array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
-        array[iPunto].x += pBezier.x;
-        array[iPunto].y += pBezier.y;
-        array[iPunto].z += pBezier.z;
-        glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+        if(existeEnLista(existe,iPunto) == false)
+        {
+          array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
+          glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+          existe.insert(existe.end(),iPunto);
+        }
       }
-      glEnd();
-      
-      
-      
     }
-    cout << pBezier.x << " " << pBezier.y << " " << pBezier.z << endl;
-    
-    glFlush();
-    glutSwapBuffers(); 
-    
+    pintaFigura();    
   }
+  
 }
 /**
  * Funcion damePivote()
@@ -167,11 +180,9 @@ void recorreBezier()
 Punto damePivote()
 { 
   Punto p;
-  p.x = 0 - array[  c.front().VERTICES().front()  ].x;
-  p.y = 0 - array[  c.front().VERTICES().front()  ].y;
-  p.z = 0 - array[  c.front().VERTICES().front()  ].z;
-  // cout << "Punto pivote" << endl;
-  // cout << "\n\t x: " << p.x << "\t y: " << p.y << "\t z: " << p.z << endl;
+  p.x = 0.0f - array[  c.front().VERTICES().front()  ].x;
+  p.y = 0.0f - array[  c.front().VERTICES().front()  ].y;
+  p.z = 0.0f - array[  c.front().VERTICES().front()  ].z;
   return p;
 }
 Punto damePivote(Punto b)
@@ -180,8 +191,6 @@ Punto damePivote(Punto b)
   p.x = b.x - array[  c.front().VERTICES().front()  ].x;
   p.y = b.y - array[  c.front().VERTICES().front()  ].y;
   p.z = b.z - array[  c.front().VERTICES().front()  ].z;
-  // cout << "Punto pivote" << endl;
-  // cout << "\n\t x: " << p.x << "\t y: " << p.y << "\t z: " << p.z << endl;
   return p;
 }
 /**
@@ -191,18 +200,35 @@ Punto damePivote(Punto b)
  */
 void traslacionOrigen()
 {
+    list<int> existe;
     pivote = damePivote();
     for(CCara caraFigura : c)
     {
       for(int iPunto : caraFigura.VERTICES())
       {
-        array[iPunto].x += pivote.x;
-        array[iPunto].y += pivote.y;
-        array[iPunto].z += pivote.z;
-        //array[iPunto] = multMatriz4x1(array[iPunto],pivote);
+        if(existeEnLista(existe, iPunto) == false)
+        {
+          array[iPunto].x += pivote.x;
+          array[iPunto].y += pivote.y;
+          array[iPunto].z += pivote.z;
+          existe.insert(existe.end(),iPunto);
+        }
       }
     }
 
+}
+bool existeEnLista(list<int> lista, int busca)
+{
+  bool existe = false;
+  for(int aux : lista)
+  {
+    if(busca == aux)
+    {
+      existe = true;
+      break;
+    }
+  }
+  return existe;
 }
 /**
  * Funcion multMatriz4x1(CVertice punto,Punto p)
@@ -218,19 +244,20 @@ CVertice multMatriz4x1(CVertice punto,Punto p)
   float m[4][4] = {0}; //Matriz de traslacion
 
   // Inicializacion de matriz de traslacion
-  m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;
+  m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1.0f;
   m[0][3] = punto.x;
   m[1][3] = punto.y;
   m[2][3] = punto.z;
   
-  vector[0] = m[0][0] * p.x + m[0][3] * 1;
-  vector[1] = m[1][1] * p.y + m[1][3] * 1;
-  vector[2] = m[2][2] * p.z + m[2][3] * 1;
-  vector[3] = 1;
-  
+  vector[0] = m[0][0] * p.x + m[0][3] * 1.0f;
+  vector[1] = m[1][1] * p.y + m[1][3] * 1.0f;
+  vector[2] = m[2][2] * p.z + m[2][3] * 1.0f;
+  vector[3] = 1.0f;
+
   nuevo.x =  vector[0];
   nuevo.y =  vector[1];
   nuevo.z =  vector[2];
+  
 
   return nuevo;
   
@@ -300,7 +327,7 @@ void CGrafico::generaBezier()
     p.z = b1.obtenZ(t);
 
     curva.insert(curva.end(),p);
-    t += 0.1;
+    t += 0.01;
   }
   // t = 0.0;
   // while(t <= 1) // Ciclo de la segunda curva
@@ -338,5 +365,5 @@ CGrafico::~CGrafico()
    // delete[] array ;
 //  v.clear();
 //  c.clear();
-  cout << "DEsTRUCTOR" << endl;
+  cout << "DESTRUCTOR" << endl;
 }

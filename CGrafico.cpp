@@ -1,12 +1,47 @@
 #include "Headers/CGrafico.h"
+#include "CBezier.cpp"
 /****************************************************
  * CGrafico()
  * Constructor de la clase CGrafico
- * Se inicializa la lista de vertices
+ * Se inicializan los puntos pivote para el bezier
  ****************************************************/
 CGrafico::CGrafico()
 {
-    
+        // b1.creaP1(0.0,0.0,0.0);
+    // b1.creaP2(0.0,0.2,0.0);
+    // b1.creaP3(10.2,0.2,0.0);
+    // b1.creaP4(20.2,0.0,0.0);
+
+    // b2.creaP1(b1.dameP4().x,b1.dameP4().y,b1.dameP4().z);
+    // b2.creaP2(0.2,-0.2,0.0);
+    // b2.creaP3(0.4,-0.2,0.0);
+    // b2.creaP4(0.4,0.0,0.0);
+
+    // b3.creaP1(b2.dameP4().x,b2.dameP4().y,b2.dameP4().z);
+    // b3.creaP2(0.4,0.2,0.0);
+    // b3.creaP3(50.6,0.2,0.0);
+    // b3.creaP4(100.6,0.0,0.0);
+
+
+  b1.creaP1(0.0,0.0,0.0);
+  b1.creaP2(0.0,0.2,0.0);
+  b1.creaP3(0.2,0.2,0.0);
+  b1.creaP4(0.4,0.0,0.0);
+
+  // b2.creaP1(b1.dameP4().x,b1.dameP4().y,b1.dameP4().z);
+  // b2.creaP2(0.2,-0.2,0.0);
+  // b2.creaP3(0.4,-0.2,0.0);
+  // b2.creaP4(0.4,0.0,0.0);
+
+  // b3.creaP1(b2.dameP4().x,b2.dameP4().y,b2.dameP4().z);
+  // b3.creaP2(0.4,0.2,0.0);
+  // b3.creaP3(0.6,0.2,0.0);
+  // b3.creaP4(0.6,0.0,0.0);
+
+  //Una vez obtenidos los puntos pivote para el bezier, se procede a generar la curva
+  generaBezier();
+
+  lCurva = curva;
 }
 /**
  * Metodo dameVertices(list<CVertice> vertices)
@@ -124,6 +159,49 @@ void specialKeys( int key, int x, int y ) {
   
  
 }
+/**
+ * Metodo generaBezier()
+ * 
+ * Se realiza la curva Bezier.
+ * Cada punto de la curva se guarda en la lista "curva"
+ */
+void CGrafico::generaBezier()
+{
+  t = 0.0;
+  Punto p;
+  while(t <= 1) // Ciclo de la primera curva
+  {
+    p.x = b1.obtenX(t);
+    p.y = b1.obtenY(t);
+    p.z = b1.obtenZ(t);
+
+    curva.insert(curva.end(),p);
+    t += 0.006;
+  }
+  // t = 0.0;
+  // while(t <= 1) // Ciclo de la segunda curva
+  // {
+  //   p.x = b2.obtenX(t);
+  //   p.y = b2.obtenY(t);
+  //   p.z = b2.obtenZ(t);
+
+  //   curva.insert(curva.end(),p);
+  //   t += 0.01;
+  // }
+  // t = 0.0;
+  // while(t <= 1) // Ciclo de la tercer curva
+  // {
+  //   p.x = b3.obtenX(t);
+  //   p.y = b3.obtenY(t);
+  //   p.z = b3.obtenZ(t);
+
+  //   curva.insert(curva.end(),p);
+  //   t += 0.01;
+  // }
+}
+
+
+
 
 
 

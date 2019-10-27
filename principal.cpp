@@ -2,7 +2,7 @@
  * Proyecto:    Lector de Archivos WaveFront (.obj)
  * Fecha:       01/09/2019
  * Autor:       Hector Andrey Hernandez Alonso
- * Clases:      CArchivo, CCara, CVertice, CGrafico
+ * Clases:      CArchivo, CCara, CVertice, CGrafico, CBezier
  ***********************************************************************************************/
 #include "Headers/CArchivo.h" //Clase CArchivo
 #include "CArchivo.cpp"

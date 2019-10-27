@@ -22,10 +22,17 @@ list<CVertice> v;   //Lista global de los vertices obtenidos del archivo obj
 list<CCara> c;      //Lista global de las caras obtenidas del archivo oj
 list<Punto> lCurva; //Lista global que contiene los puntos (x,y,z) del bezier
 CVertice* array;    //Arreglo de vertices //CVertice array[10000];
-
+Punto pivote;       //Punto pivote de la figura 
 /* Prototipos de funciones externas a la clase CGrafico */
 void display();
 void specialKeys( int key, int x, int y );
+void recorreBezier();
+void pintaBezier();
+void traslacionOrigen();
+CVertice  multMatriz4x1(CVertice punto,Punto p);
+
+Punto damePivote(Punto p);
+Punto damePivote();
 
 class CGrafico{
     private:
@@ -41,6 +48,7 @@ class CGrafico{
         void muestraCaras();
         void pinta(int argc, char* argv[]);
         void generaBezier();
+        
 };
 
 #endif

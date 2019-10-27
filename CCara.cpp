@@ -21,7 +21,7 @@ CCara::~CCara()
 
 /**
  * Metodo VERTICES()
- * return   lista de vertices
+ * @return   lista de vertices int
  */
 list<int> CCara::VERTICES()
 {

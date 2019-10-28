@@ -13,6 +13,9 @@
 #include "CBezier.h"
 #include "math.h"
 
+#define PI 3.14159265
+
+long TAM;
 /*Variables Globables*/
 double rotate_y=0;  //Rotar la figura en Y
 double rotate_x=0;  //Rotar la figura en X
@@ -31,9 +34,10 @@ void pintaBezier();
 void pintaFigura();
 void traslacionOrigen();
 void dameVertices(list<CVertice> vertices);
-CVertice  multMatriz4x1(CVertice punto,Punto p);
+CVertice multMatriz4x1(CVertice punto,Punto p);
 bool existeEnLista(list<int> lista, int busca);
-
+Punto rotacionX(float angulo, Punto actual);
+void rotacion();
 Punto damePivote(Punto p);
 Punto damePivote();
 

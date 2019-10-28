@@ -55,6 +55,9 @@ void CGrafico::dameVertices(list<CVertice> vertices)
   array = (CVertice*)malloc(sizeof(CVertice)*(vertices.size()+1));
   for(CVertice cv: vertices)   //Se guarda en un arreglo los vertices para poder pintarlos
     array[j++] = cv; 
+  
+  TAM = j;
+  
 }
 
 void dameVertices(list<CVertice> vertices)
@@ -131,6 +134,19 @@ void pintaBezier()
   }
   
 }
+
+Punto rotacionX(float angulo, Punto actual)
+{
+  float aSen, aCos;
+  Punto nuevo;
+  aSen = sin(angulo*PI/180); 
+  aCos = cos(angulo*PI/180);
+  nuevo.y = actual.y * aCos - actual.z*aSen;
+  nuevo.z = actual.y * aSen + actual.z*aCos;
+  nuevo.x = actual.x;
+  return nuevo;
+  
+}
 void pintaFigura()
 {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -147,28 +163,72 @@ void pintaFigura()
   glFlush();
   glutSwapBuffers();
 }
+void rotacion()
+{
+  Punto rot;
+  Punto actual;
+  list<int> existe;
+  pivote = damePivote();
+  for(long i = 0; i < TAM; i++)
+  {
 
+    actual.x = array[i].x;
+    actual.y = array[i].y;
+    actual.z = array[i].z;
+
+    rot = rotacionX(20,actual);
+    array[i].x = rot.x;
+    array[i].y = rot.y;
+    array[i].z = rot.z;
+    
+  }
+  // for(CCara caraFigura : c)
+  // {
+  //   for(int iPunto : caraFigura.VERTICES())
+  //   {
+  //     if(existeEnLista(existe, iPunto) == false)
+  //     {
+  //       actual.x = array[iPunto].x;
+  //       actual.y = array[iPunto].y;
+  //       actual.z = array[iPunto].z;
+
+  //       rot = rotacionX(20,actual);
+  //       array[iPunto].x = rot.x;
+  //       array[iPunto].y = rot.y;
+  //       array[iPunto].z = rot.z;
+  //       existe.insert(existe.end(),iPunto);
+  //     }
+  //   }
+  // }
+}
 /**
  * Se recorre la lista lCurva, contiene todos los puntos del bezier
  */
 void recorreBezier()
 { 
+  Punto rota;
   for(Punto pBezier : lCurva)
   {
     list<int> existe;
     traslacionOrigen();
-    for(CCara caraFigura : c) //Se recorren todas las caras de la figura
-    {  
-       for(int iPunto : caraFigura.VERTICES()) //Se recorren todos los puntos que tiene 1 cara
-      {
-        if(existeEnLista(existe,iPunto) == false)
-        {
+    rotacion();
+    for(int iPunto = 0; iPunto < TAM; iPunto++)
+    {
           array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
           glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
-          existe.insert(existe.end(),iPunto);
-        }
-      }
     }
+    // for(CCara caraFigura : c) //Se recorren todas las caras de la figura
+    // {  
+    //    for(int iPunto : caraFigura.VERTICES()) //Se recorren todos los puntos que tiene 1 cara
+    //   {
+    //     if(existeEnLista(existe,iPunto) == false)
+    //     {
+    //       array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
+    //       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+    //       existe.insert(existe.end(),iPunto);
+    //     }
+    //   }
+    // }
     pintaFigura();    
   }
   
@@ -193,6 +253,8 @@ Punto damePivote(Punto b)
   p.z = b.z - array[  c.front().VERTICES().front()  ].z;
   return p;
 }
+
+
 /**
  * Funcion traslacionOrigen(Punto actual)
  *
@@ -202,19 +264,25 @@ void traslacionOrigen()
 {
     list<int> existe;
     pivote = damePivote();
-    for(CCara caraFigura : c)
+    for(int i = 0; i < TAM; i++)
     {
-      for(int iPunto : caraFigura.VERTICES())
-      {
-        if(existeEnLista(existe, iPunto) == false)
-        {
-          array[iPunto].x += pivote.x;
-          array[iPunto].y += pivote.y;
-          array[iPunto].z += pivote.z;
-          existe.insert(existe.end(),iPunto);
-        }
-      }
+      array[i].x += pivote.x;
+      array[i].y += pivote.y;
+      array[i].z += pivote.z;
     }
+    // for(CCara caraFigura : c)
+    // {
+    //   for(int iPunto : caraFigura.VERTICES())
+    //   {
+    //     if(existeEnLista(existe, iPunto) == false)
+    //     {
+    //       array[iPunto].x += pivote.x;
+    //       array[iPunto].y += pivote.y;
+    //       array[iPunto].z += pivote.z;
+    //       existe.insert(existe.end(),iPunto);
+    //     }
+    //   }
+    // }
 
 }
 bool existeEnLista(list<int> lista, int busca)
@@ -327,7 +395,7 @@ void CGrafico::generaBezier()
     p.z = b1.obtenZ(t);
 
     curva.insert(curva.end(),p);
-    t += 0.01;
+    t += 0.001;
   }
   // t = 0.0;
   // while(t <= 1) // Ciclo de la segunda curva

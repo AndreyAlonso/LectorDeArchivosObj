@@ -167,8 +167,6 @@ void rotacion()
 {
   Punto rot;
   Punto actual;
-  list<int> existe;
-  pivote = damePivote();
   for(long i = 0; i < TAM; i++)
   {
 
@@ -176,30 +174,12 @@ void rotacion()
     actual.y = array[i].y;
     actual.z = array[i].z;
 
-    rot = rotacionX(20,actual);
+    rot = rotacionX(12,actual);
     array[i].x = rot.x;
     array[i].y = rot.y;
     array[i].z = rot.z;
     
   }
-  // for(CCara caraFigura : c)
-  // {
-  //   for(int iPunto : caraFigura.VERTICES())
-  //   {
-  //     if(existeEnLista(existe, iPunto) == false)
-  //     {
-  //       actual.x = array[iPunto].x;
-  //       actual.y = array[iPunto].y;
-  //       actual.z = array[iPunto].z;
-
-  //       rot = rotacionX(20,actual);
-  //       array[iPunto].x = rot.x;
-  //       array[iPunto].y = rot.y;
-  //       array[iPunto].z = rot.z;
-  //       existe.insert(existe.end(),iPunto);
-  //     }
-  //   }
-  // }
 }
 /**
  * Se recorre la lista lCurva, contiene todos los puntos del bezier
@@ -214,22 +194,11 @@ void recorreBezier()
     rotacion();
     for(int iPunto = 0; iPunto < TAM; iPunto++)
     {
-          array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
-          glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+      array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
+      glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
     }
-    // for(CCara caraFigura : c) //Se recorren todas las caras de la figura
-    // {  
-    //    for(int iPunto : caraFigura.VERTICES()) //Se recorren todos los puntos que tiene 1 cara
-    //   {
-    //     if(existeEnLista(existe,iPunto) == false)
-    //     {
-    //       array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
-    //       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
-    //       existe.insert(existe.end(),iPunto);
-    //     }
-    //   }
-    // }
     pintaFigura();    
+    
   }
   
 }
@@ -270,20 +239,6 @@ void traslacionOrigen()
       array[i].y += pivote.y;
       array[i].z += pivote.z;
     }
-    // for(CCara caraFigura : c)
-    // {
-    //   for(int iPunto : caraFigura.VERTICES())
-    //   {
-    //     if(existeEnLista(existe, iPunto) == false)
-    //     {
-    //       array[iPunto].x += pivote.x;
-    //       array[iPunto].y += pivote.y;
-    //       array[iPunto].z += pivote.z;
-    //       existe.insert(existe.end(),iPunto);
-    //     }
-    //   }
-    // }
-
 }
 bool existeEnLista(list<int> lista, int busca)
 {

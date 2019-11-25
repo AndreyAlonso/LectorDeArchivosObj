@@ -76,8 +76,73 @@ void dameVertices(list<CVertice> vertices)
 void CGrafico::dameCaras(list<CCara> caras)
 {
     this->caras = caras;
+      
 }
 
+/**
+ *  Funcion calculaNormales()
+ *  Se recorre la lista de las caras de la figura
+ *  y se obtiene el vector normal
+ *  
+ */
+void calculaNormales()
+{
+
+  list<CCara> temp;
+  CVertice  p1,p2,p3, P,Q,N;
+  GLfloat modulo;
+  int i;
+  for(CCara face : c){
+    i = 0;
+    modulo = 0;
+    for(int pos: face.VERTICES()){
+      switch(i){
+        case 1:
+          p1 = array[pos];
+        break;
+        case 2:
+          p2 = array[pos];
+        break;
+        case 3:
+          p3 = array[pos];
+        break;
+      }
+      i++;
+
+    }
+    P.x = p2.x - p1.x;
+    P.y = p2.y - p1.y;
+    P.z = p2.z - p1.z;
+
+    Q.x = p3.x - p1.x;
+    Q.y = p3.y - p1.y;
+    Q.z = p3.z - p1.z;
+
+    N.x = (P.y * Q.z) - (P.z * Q.y);
+    N.y = (P.z * Q.x) - (P.x * Q.z);
+    N.z = (P.x * Q.y) - (P.y * Q.x);
+
+    modulo = sqrt(pow(N.x,2) + pow(N.y,2) + pow(N.z,2));
+    if( modulo != 0)
+    {
+      
+      face.N.x = N.x/modulo;
+      face.N.y = N.y/modulo;
+      face.N.z = N.z/modulo;
+      temp.insert(temp.end(),face);
+    }
+  }
+  c = temp;
+  imprimeNormales();
+
+}
+
+void imprimeNormales()
+{
+ for(CCara face : c){
+    cout << "vn:\t" << face.N.x << " \t\t" << face.N.y << " \t\t" << face.N.z << endl;
+ } 
+}
 /**
  * Metoodo muestraVertices()
  * Muestra en pantalla las coordenadas (x,y,z)  del vertice
@@ -107,12 +172,20 @@ void display()
 {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+   glLightfv(GL_LIGHT0, GL_POSITION, LightPos);        // Set Light1 Position
+ glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);         // Set Light1 Ambience
+ glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);         // Set Light1 Diffuse
+ glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpc);        // Set Light1 Specular
+ glEnable(GL_LIGHT0);                                // Enable Light1
+ glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+
   // glRotatef( rotate_x, 1.0, 0.0, 0.0 );
   // glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   // glViewport(0,0,250,250);
   if(bandera)
   {
-      pintaBezier();
+    //  pintaBezier();
       recorreBezier();
       bandera = false;
   }
@@ -149,11 +222,22 @@ Punto rotacionX(float angulo, Punto actual)
 }
 void pintaFigura()
 {
+  GLfloat mat_ambient[] = { 0.04f, 0.28f, 0.36f, 1.0f };
+  GLfloat mat_diffuse[] = { 0.05f, 0.5f, 0.9f, 1.0f };
+  GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+  GLfloat mat_shininess[] = { 128.0f };
+ 
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+  glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+      // gluLookAt(0.75, 0.75, 0.75, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
   for(CCara caraFigura : c) //Se recorren todas las caras de la figura
   {
     glBegin(GL_POLYGON);
+    glNormal3f(caraFigura.N.x,caraFigura.N.y,caraFigura.N.z);
     for(int iPunto : caraFigura.VERTICES())
     {
       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z); 
@@ -174,7 +258,7 @@ void rotacion()
     actual.y = array[i].y;
     actual.z = array[i].z;
 
-    rot = rotacionX(12,actual);
+    rot = rotacionX(5,actual);
     array[i].x = rot.x;
     array[i].y = rot.y;
     array[i].z = rot.z;
@@ -186,16 +270,17 @@ void rotacion()
  */
 void recorreBezier()
 { 
+  
   Punto rota;
   for(Punto pBezier : lCurva)
   {
     list<int> existe;
-    traslacionOrigen();
+   traslacionOrigen();
     rotacion();
     for(int iPunto = 0; iPunto < TAM; iPunto++)
     {
-      array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
-      glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+     array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
+     glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
     }
     pintaFigura();    
     
@@ -296,13 +381,17 @@ void CGrafico::pinta(int argc, char* argv[])
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(400,0);
     glutInitWindowSize( 800, 600);
-  
+   glShadeModel(GL_SMOOTH);
+
     glutCreateWindow("Lector de Archivos WaveFront (.obj)");
     //  Habilitar la prueba de profundidad de Z-buffer
-    glEnable(GL_DEPTH_TEST);
+
+   
 
     v = vertices; //Se guardan los vertices en una lista global
     c = caras;    //Se guardan las caras en una lista global
+    
+    calculaNormales();
 
     glutDisplayFunc(display);     //Llamada a la funcion display()
     glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
@@ -348,7 +437,7 @@ void CGrafico::generaBezier()
     p.x = b1.obtenX(t);
     p.y = b1.obtenY(t);
     p.z = b1.obtenZ(t);
-
+  
     curva.insert(curva.end(),p);
     t += 0.001;
   }

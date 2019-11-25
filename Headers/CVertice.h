@@ -15,7 +15,7 @@ class CVertice
         void setY(float y);
         void setZ(float z);
         float x, y, z; //Coordenadas del vertice
-    
+        
 
 
 };

@@ -26,6 +26,13 @@ list<CCara> c;      //Lista global de las caras obtenidas del archivo oj
 list<Punto> lCurva; //Lista global que contiene los puntos (x,y,z) del bezier
 CVertice* array;    //Arreglo de vertices //CVertice array[10000];
 Punto pivote;       //Punto pivote de la figura 
+
+float LightPos[] = { 0.0f, 0.5f, 1.0f, 0.0f};   // Light Position
+float LightAmb[] = { 0.2f, 0.2f, 0.2f, 1.0f};   // Ambient Light Values
+float LightDif[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Diffuse Light Values
+float LightSpc[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Specular Light Values
+
+
 /* Prototipos de funciones externas a la clase CGrafico */
 void display();
 void specialKeys( int key, int x, int y );
@@ -40,6 +47,8 @@ Punto rotacionX(float angulo, Punto actual);
 void rotacion();
 Punto damePivote(Punto p);
 Punto damePivote();
+void calculaNormales();
+void imprimeNormales();
 
 class CGrafico{
     private:

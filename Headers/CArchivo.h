@@ -22,10 +22,10 @@ class CArchivo{
         string setNombre();
         string Split(string cadena, char c);
         bool validaArchivo();
-        int abreArchivo();
+        long abreArchivo();
         void capturaVertices(string renglon);
         list<float> separaRenglon(string renglon);
-        list<int> obtenCara(string renglon);
+        list<long> obtenCara(string renglon);
         CGrafico setGrafico();
 };
 

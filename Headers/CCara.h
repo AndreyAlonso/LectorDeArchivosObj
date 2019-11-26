@@ -10,11 +10,11 @@ using namespace std;
 
 class CCara{
     private:
-        list<int> vertices;
+        list<long> vertices;
     public:
-        CCara(list<int> vertices);
+        CCara(list<long> vertices);
         Punto N;       // Normal del vertice
-        list<int> VERTICES();
+        list<long> VERTICES();
         string muestraCara();
         ~CCara();
 };

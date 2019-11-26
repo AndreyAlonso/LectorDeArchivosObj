@@ -23,10 +23,10 @@ CGrafico::CGrafico()
     // b3.creaP4(100.6,0.0,0.0);
 
 
-  b1.creaP1(  0.0, 0.0, 0.0 );
-  b1.creaP2(  0.2, 0.2, 0.0 );
-  b1.creaP3(  0.2, 0.2, 0.0 );
-  b1.creaP4(  0.4, 0.0, 0.0 );
+  b1.creaP1(  0.497f,0.496f, 0.0f );
+  b1.creaP2(  0.546f,-0.965f, 0.0f );
+  b1.creaP3(  -0.01f,-1.03f, 0.0f );
+  b1.creaP4(  0.001f, -0.808f, 0.0f );
 
   // b2.creaP1(b1.dameP4().x,b1.dameP4().y,b1.dameP4().z);
   // b2.creaP2(0.2,-0.2,0.0);
@@ -133,7 +133,7 @@ void calculaNormales()
     }
   }
   c = temp;
-  imprimeNormales();
+  // imprimeNormales();
 
 }
 
@@ -233,13 +233,15 @@ void pintaFigura()
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-      // gluLookAt(0.75, 0.75, 0.75, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+       
   for(CCara caraFigura : c) //Se recorren todas las caras de la figura
   {
     glBegin(GL_POLYGON);
+    // calculaNormales();
     glNormal3f(caraFigura.N.x,caraFigura.N.y,caraFigura.N.z);
     for(int iPunto : caraFigura.VERTICES())
     {
+      // gluLookAt(array[iPunto].x,array[iPunto].y,-2, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z); 
     }
     glEnd(); 
@@ -276,12 +278,13 @@ void recorreBezier()
   {
     list<int> existe;
    traslacionOrigen();
-    rotacion();
+   rotacion();
     for(int iPunto = 0; iPunto < TAM; iPunto++)
     {
      array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
      glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
     }
+    
     pintaFigura();    
     
   }
@@ -439,7 +442,7 @@ void CGrafico::generaBezier()
     p.z = b1.obtenZ(t);
   
     curva.insert(curva.end(),p);
-    t += 0.001;
+    t += 0.002;
   }
   // t = 0.0;
   // while(t <= 1) // Ciclo de la segunda curva

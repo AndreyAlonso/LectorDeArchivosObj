@@ -45,7 +45,7 @@ bool CArchivo::validaArchivo()
 string CArchivo::Split(string archivo, char c)
 {
     cout << "Nombre" << archivo << endl;
-    int i;
+    long i;
     bool band = false;
     string extension = "";
     for(i = 0; i < archivo.length(); i++)
@@ -63,7 +63,7 @@ string CArchivo::Split(string archivo, char c)
  * 1. Verifica que el archivo existe en el directorio
  * 2. Si existe, entonces lo abre
  **/
-int CArchivo::abreArchivo()
+long CArchivo::abreArchivo()
 {
     ifstream archivo;
     archivo.open(nombreArchivo);
@@ -100,7 +100,7 @@ int CArchivo::abreArchivo()
 void CArchivo::capturaVertices(string renglon)
 {
     list<float> puntos;
-    list<int>   caras;
+    list<long>   caras;
     CCara* objeto;
     float x,y,z;
     switch(renglon[0])
@@ -145,14 +145,14 @@ void CArchivo::capturaVertices(string renglon)
  */
 list<float> CArchivo::separaRenglon(string renglon)
 {
-    int i;
+    long i;
     string dato = ""; 
     float pos;
     string dd;
     list<float> coordenadas;    
     for(i = 0; i < renglon.length(); i++)
     {
-        if(renglon[i] != 'v' && renglon[0] != '#' && renglon[i+1] != 'n'&& renglon[0] != 'm' && renglon[0] != 's')
+        if(renglon[i] != 'v' && renglon[0] != '#' && renglon[i+1] != 'n' && renglon[i+1] != 't' && renglon[0] != 'm' && renglon[0] != 's')
         {
             if(renglon[i] != ' ')
             {   
@@ -180,12 +180,12 @@ list<float> CArchivo::separaRenglon(string renglon)
  * return:  lista de los vertices obtenidos en una cara
  *
  **/
-list<int> CArchivo::obtenCara(string renglon)
+list<long> CArchivo::obtenCara(string renglon)
 {
-    int i;
+    long i;
     string dato = ""; 
     float pos;
-    list<int> coordenadas;    
+    list<long> coordenadas;    
     for(i = 0; i < renglon.length(); i++)
     {
         if(renglon[i] != 'f' && renglon[0] != '#' && renglon[i+1] != 'n'&& renglon[0] != 'm' && renglon[0] != 's')
@@ -196,7 +196,7 @@ list<int> CArchivo::obtenCara(string renglon)
             }
             else if(renglon[i] == ' ' && dato != "")
             {
-                pos = stoi(dato);
+                pos = stol(dato);
                 coordenadas.insert(coordenadas.end(),pos);
                 dato = "";
             }           
@@ -204,7 +204,7 @@ list<int> CArchivo::obtenCara(string renglon)
     }
     if(!dato.empty()) //Si el dato no esta vacio, se agrega a la lista de coordenadas
     {
-        pos = stoi(dato);
+        pos = stol(dato);
         coordenadas.insert(coordenadas.end(),pos);
     }    
     return coordenadas;

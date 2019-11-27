@@ -15,19 +15,23 @@
 
 #define PI 3.14159265
 
-long TAM;
 /*Variables Globables*/
+
+long TAM;
+
 double rotate_y=0;  //Rotar la figura en Y
 double rotate_x=0;  //Rotar la figura en X
 CBezier b1,b2,b3;   //Curvas bezier
-double t = 0;        //Variable auxiliar para realizacion del bezier
+double t = 0;       //Variable auxiliar para realizacion del bezier
 list<CVertice> v;   //Lista global de los vertices obtenidos del archivo obj
 list<CCara> c;      //Lista global de las caras obtenidas del archivo oj
 list<Punto> lCurva; //Lista global que contiene los puntos (x,y,z) del bezier
 CVertice* array;    //Arreglo de vertices //CVertice array[10000];
 Punto pivote;       //Punto pivote de la figura 
+bool bandera = true;
 
-float LightPos[] = { 0.0f, 0.5f, 1.0f, 0.0f};   // Light Position
+/*  Iluminacion */
+float LightPos[] = { 1.0f, 1.0f, 0.0f, 0.0f};   // Light Position
 float LightAmb[] = { 0.2f, 0.2f, 0.2f, 1.0f};   // Ambient Light Values
 float LightDif[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Diffuse Light Values
 float LightSpc[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Specular Light Values
@@ -42,10 +46,9 @@ void pintaFigura();
 void traslacionOrigen();
 void dameVertices(list<CVertice> vertices);
 CVertice multMatriz4x1(CVertice punto,Punto p);
-bool existeEnLista(list<int> lista, int busca);
+
 Punto rotacionX(float angulo, Punto actual);
 void rotacion();
-Punto damePivote(Punto p);
 Punto damePivote();
 void calculaNormales();
 void imprimeNormales();
@@ -56,12 +59,9 @@ class CGrafico{
         list<CVertice> vertices;    // Lista de las caras del archivo obj
         list<Punto> curva;          // Contiene todos los puntos(x,y,z) del bezier
     public:
-        CGrafico();     //Constructor
-        ~CGrafico();    //Destructor
+        CGrafico();                 //Constructor
         void dameVertices(list<CVertice> vertices);
         void dameCaras(list<CCara> caras);
-        void muestraVertices();
-        void muestraCaras();
         void pinta(int argc, char* argv[]);
         void generaBezier();
         

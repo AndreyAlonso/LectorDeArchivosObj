@@ -7,38 +7,11 @@
  ****************************************************/
 CGrafico::CGrafico()
 {
-        // b1.creaP1(0.0,0.0,0.0);
-    // b1.creaP2(0.0,0.2,0.0);
-    // b1.creaP3(10.2,0.2,0.0);
-    // b1.creaP4(20.2,0.0,0.0);
-
-    // b2.creaP1(b1.dameP4().x,b1.dameP4().y,b1.dameP4().z);
-    // b2.creaP2(0.2,-0.2,0.0);
-    // b2.creaP3(0.4,-0.2,0.0);
-    // b2.creaP4(0.4,0.0,0.0);
-
-    // b3.creaP1(b2.dameP4().x,b2.dameP4().y,b2.dameP4().z);
-    // b3.creaP2(0.4,0.2,0.0);
-    // b3.creaP3(50.6,0.2,0.0);
-    // b3.creaP4(100.6,0.0,0.0);
-
-
-  b1.creaP1(  0.497f,0.496f, 0.0f );
+  b1.creaP1(  0.497f, 0.496f, 0.0f );
   b1.creaP2(  0.546f,-0.965f, 0.0f );
-  b1.creaP3(  -0.01f,-1.03f, 0.0f );
-  b1.creaP4(  0.001f, -0.808f, 0.0f );
+  b1.creaP3(  -0.01f,- 1.03f, 0.0f );
+  b1.creaP4(  0.001f,-0.808f, 0.0f );
 
-  // b2.creaP1(b1.dameP4().x,b1.dameP4().y,b1.dameP4().z);
-  // b2.creaP2(0.2,-0.2,0.0);
-  // b2.creaP3(0.4,-0.2,0.0);
-  // b2.creaP4(0.4,0.0,0.0);
-
-  // b3.creaP1(b2.dameP4().x,b2.dameP4().y,b2.dameP4().z);
-  // b3.creaP2(0.4,0.2,0.0);
-  // b3.creaP3(0.6,0.2,0.0);
-  // b3.creaP4(0.6,0.0,0.0);
-
-  //Una vez obtenidos los puntos pivote para el bezier, se procede a generar la curva
   generaBezier();
 
   lCurva = curva;
@@ -60,6 +33,12 @@ void CGrafico::dameVertices(list<CVertice> vertices)
   
 }
 
+/**
+ * Funcion dameVertices(list<CVertice> vertices)
+ * @vertices: lista de vertices de la figura
+ * Se reserva espacio de memoria para los vertices de la figura
+ * Se almacenan en un apuntador
+ */
 void dameVertices(list<CVertice> vertices)
 {
   long j = 1;
@@ -78,7 +57,6 @@ void CGrafico::dameCaras(list<CCara> caras)
     this->caras = caras;
       
 }
-
 /**
  *  Funcion calculaNormales()
  *  Se recorre la lista de las caras de la figura
@@ -136,34 +114,18 @@ void calculaNormales()
   // imprimeNormales();
 
 }
-
+/**
+ * Funcion impleNormales()
+ * Se muestra en consola los vertices normales 
+ * de las caras de la figura
+ */
 void imprimeNormales()
 {
  for(CCara face : c){
     cout << "vn:\t" << face.N.x << " \t\t" << face.N.y << " \t\t" << face.N.z << endl;
  } 
 }
-/**
- * Metoodo muestraVertices()
- * Muestra en pantalla las coordenadas (x,y,z)  del vertice
- */
-void CGrafico::muestraVertices()
-{
-    cout << "LOS VERTICES DEL GRAFO SON" << endl;
-    for(CVertice v: vertices)
-        cout << v.muestraCoordenada() << endl;
-}
-/**
- * Metodo muestraCaras()
- * Muestra en pantalla los vertices que tiene la cara
- */
-void CGrafico::muestraCaras()
-{
-    cout << "LAS CARAS DEL GRAFO SON" << endl;
-    for(CCara c: caras)
-        cout << c.muestraCara() << endl;
-}
-bool bandera = true;
+
 /**
  * Funcion display()
  * Aqui se realiza el pintado de las figuras
@@ -172,22 +134,19 @@ void display()
 {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-   glLightfv(GL_LIGHT0, GL_POSITION, LightPos);        // Set Light1 Position
- glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);         // Set Light1 Ambience
- glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);         // Set Light1 Diffuse
- glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpc);        // Set Light1 Specular
- glEnable(GL_LIGHT0);                                // Enable Light1
- glEnable(GL_LIGHTING);
-    glEnable(GL_DEPTH_TEST);
+  glLightfv(GL_LIGHT0, GL_POSITION, LightPos);        // Set Light1 Position
+  glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);         // Set Light1 Ambience
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);         // Set Light1 Diffuse
+  glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpc);        // Set Light1 Specular
+  glEnable(GL_LIGHT0);                                // Enable Light1
+  glEnable(GL_LIGHTING);
+  glEnable(GL_DEPTH_TEST);
 
-  // glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-  // glRotatef( rotate_y, 0.0, 1.0, 0.0 );
-  // glViewport(0,0,250,250);
   if(bandera)
   {
-    //  pintaBezier();
-      recorreBezier();
-      bandera = false;
+    // pintaBezier();
+    recorreBezier();
+    bandera = false;
   }
   glFlush();
   glutSwapBuffers();
@@ -208,6 +167,14 @@ void pintaBezier()
   
 }
 
+/**
+ * Funcion rotacionX(float angulo, Punto actual)
+ * @angulo: angulo que se desea aplicar la rotacion
+ * @actual: vertice actual de la figura a rotar
+ * 
+ * Se aplica la mutliplicacion de matrices para rotar
+ * el vertice al nuevo punto
+ */
 Punto rotacionX(float angulo, Punto actual)
 {
   float aSen, aCos;
@@ -220,12 +187,20 @@ Punto rotacionX(float angulo, Punto actual)
   return nuevo;
   
 }
+
+/**
+ * Funcion pintaFigura()
+ * 
+ * Se muestra en pantalla la figura
+ * aplicando la rotación y traslación
+ */
 void pintaFigura()
 {
-  GLfloat mat_ambient[] = { 0.04f, 0.28f, 0.36f, 1.0f };
-  GLfloat mat_diffuse[] = { 0.05f, 0.5f, 0.9f, 1.0f };
-  GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-  GLfloat mat_shininess[] = { 128.0f };
+  calculaNormales();
+	GLfloat mat_ambient[] = { 1.0,0.5,1.0,0.0 };
+	GLfloat mat_diffuse[] = { 1.0, 0.7f, 0.0f, 0.0f };
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat mat_shininess[] = { 120.0f };
  
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
@@ -233,15 +208,14 @@ void pintaFigura()
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-       
+  
+  gluLookAt(0.0,0.0,0.0,0.0,0.9,0.7,0.0,-5.0,0.0);   
   for(CCara caraFigura : c) //Se recorren todas las caras de la figura
   {
     glBegin(GL_POLYGON);
-    // calculaNormales();
     glNormal3f(caraFigura.N.x,caraFigura.N.y,caraFigura.N.z);
     for(int iPunto : caraFigura.VERTICES())
-    {
-      // gluLookAt(array[iPunto].x,array[iPunto].y,-2, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    {      
       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z); 
     }
     glEnd(); 
@@ -249,6 +223,12 @@ void pintaFigura()
   glFlush();
   glutSwapBuffers();
 }
+/***
+ * Funcion rotacion()
+ * Aplicando la mutliplicacion de matrices
+ * Se rota la figura en el eje X 
+ * 
+ */
 void rotacion()
 {
   Punto rot;
@@ -277,14 +257,13 @@ void recorreBezier()
   for(Punto pBezier : lCurva)
   {
     list<int> existe;
-   traslacionOrigen();
-   rotacion();
+    traslacionOrigen();
+    rotacion();
     for(int iPunto = 0; iPunto < TAM; iPunto++)
     {
-     array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
-     glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+      array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
+      glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
     }
-    
     pintaFigura();    
     
   }
@@ -300,14 +279,6 @@ Punto damePivote()
   p.x = 0.0f - array[  c.front().VERTICES().front()  ].x;
   p.y = 0.0f - array[  c.front().VERTICES().front()  ].y;
   p.z = 0.0f - array[  c.front().VERTICES().front()  ].z;
-  return p;
-}
-Punto damePivote(Punto b)
-{ 
-  Punto p;
-  p.x = b.x - array[  c.front().VERTICES().front()  ].x;
-  p.y = b.y - array[  c.front().VERTICES().front()  ].y;
-  p.z = b.z - array[  c.front().VERTICES().front()  ].z;
   return p;
 }
 
@@ -328,19 +299,7 @@ void traslacionOrigen()
       array[i].z += pivote.z;
     }
 }
-bool existeEnLista(list<int> lista, int busca)
-{
-  bool existe = false;
-  for(int aux : lista)
-  {
-    if(busca == aux)
-    {
-      existe = true;
-      break;
-    }
-  }
-  return existe;
-}
+
 /**
  * Funcion multMatriz4x1(CVertice punto,Punto p)
  * @punto:  Punto actual de la figura
@@ -444,41 +403,4 @@ void CGrafico::generaBezier()
     curva.insert(curva.end(),p);
     t += 0.002;
   }
-  // t = 0.0;
-  // while(t <= 1) // Ciclo de la segunda curva
-  // {
-  //   p.x = b2.obtenX(t);
-  //   p.y = b2.obtenY(t);
-  //   p.z = b2.obtenZ(t);
-
-  //   curva.insert(curva.end(),p);
-  //   t += 0.01;
-  // }
-  // t = 0.0;
-  // while(t <= 1) // Ciclo de la tercer curva
-  // {
-  //   p.x = b3.obtenX(t);
-  //   p.y = b3.obtenY(t);
-  //   p.z = b3.obtenZ(t);
-
-  //   curva.insert(curva.end(),p);
-  //   t += 0.01;
-  // }
-}
-
-
-
-
-
-
-/**
- * Destructor de la clase CGrafico
- * Se vacia el arreglo y las listas
- */
-CGrafico::~CGrafico()
-{
-   // delete[] array ;
-//  v.clear();
-//  c.clear();
-  cout << "DESTRUCTOR" << endl;
 }

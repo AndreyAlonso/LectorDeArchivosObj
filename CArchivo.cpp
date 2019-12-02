@@ -65,6 +65,7 @@ string CArchivo::Split(string archivo, char c)
  **/
 long CArchivo::abreArchivo()
 {
+
     ifstream archivo;
     archivo.open(nombreArchivo);
     string renglon;
@@ -78,17 +79,49 @@ long CArchivo::abreArchivo()
        {
             getline(archivo,renglon); //Obtiene toda la linea del archivo hasta \n
             capturaVertices(renglon);   
-            //cout << renglon << endl;
        }
     }
     archivo.close();
     
     grafo.dameVertices(vertices);
     grafo.dameCaras(faces);
-    //grafo.muestraVertices();
-    //grafo.muestraCaras();
-    //cout << "Se procede a pintar" << endl;
+
+    vertices.clear();
+    faces.clear();
+
+    if(vertices.empty() && faces.empty())
+    {
+        cout << "Todo listo" << endl;
+        abreArchivoEscenario("archivos/piramide.obj");
+    }
     
+
+    
+}
+long CArchivo::abreArchivoEscenario(string escenario)
+{
+    
+    ifstream archivo;
+    archivo.open(escenario);
+    string renglon;
+    if(archivo.fail())
+    {
+        cout << "ERROR: No se pudo abrir el archivo escenario"<< endl;
+        return -1;
+    }
+    else{
+       while(!archivo.eof()) //Ciclo mientras no encuentre final del archivo
+       {
+            getline(archivo,renglon); //Obtiene toda la linea del archivo hasta \n
+            capturaVerticesEscenario(renglon);   
+       }
+    }
+    archivo.close();
+    
+    pistaPatinaje.dameVerticesEscenario(vertices2);
+    pistaPatinaje.dameCaras(faces2);
+    vertices.clear();
+    faces.clear();
 }
 /**
  * Metodo capturaVertices()
@@ -128,6 +161,45 @@ void CArchivo::capturaVertices(string renglon)
             caras = obtenCara(renglon);
             objeto = new CCara(caras);
             faces.insert(faces.end(),*objeto);
+        }
+            
+        break;
+       // default:
+            //cout << "NO ES NINGUNO" << endl;
+    }
+
+}
+void CArchivo::capturaVerticesEscenario(string renglon)
+{
+    list<float> puntos;
+    list<long>   caras;
+    CCara* objeto;
+    float x,y,z;
+    switch(renglon[0])
+    {
+        case 'o':
+            //cout << "OBJETO: " << renglon << endl;
+        break;
+        case 'v':
+        if(renglon[1] == ' ')
+        {
+            puntos = separaRenglon(renglon);
+            x = puntos.front();
+            puntos.pop_front();
+            y = puntos.front();
+            puntos.pop_front();
+            z = puntos.front();
+            puntos.pop_front();
+            vertices2.insert(vertices2.end(),CVertice(x,y,z));
+        }
+            
+        break;
+        case 'f':
+        if(renglon[1] == ' ')
+        {
+            caras = obtenCara(renglon);
+            objeto = new CCara(caras);
+            faces2.insert(faces2.end(),*objeto);
         }
             
         break;
@@ -213,4 +285,8 @@ list<long> CArchivo::obtenCara(string renglon)
 CGrafico CArchivo::setGrafico()
 {
     return grafo;
+}
+CGrafico CArchivo::setEscenario()
+{
+    return pistaPatinaje;
 }

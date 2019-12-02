@@ -16,7 +16,7 @@ CCara::CCara(list<long> vertices)
  **/
 CCara::~CCara()
 {
-    vertices.empty();
+    vertices.clear();
 }
 
 /**

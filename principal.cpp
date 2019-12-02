@@ -63,10 +63,9 @@ void menu(int argc, char* argv[])
                     CArchivo archivo(nArchivo);//Creacion de objeto de la clase CArchivo
                     if(archivo.validaArchivo())
                     {
-                        cout << "El archivo si tiene extension .obj" << endl;
                         if(archivo.abreArchivo() != -1)
                         {
-                            archivo.setGrafico().pinta(argc,argv);
+                            archivo.setGrafico().pinta(argc,argv,archivo.setEscenario());
                             cout << "hasta ahora todo bien";
                         }
                     }

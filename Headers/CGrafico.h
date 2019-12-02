@@ -18,6 +18,7 @@
 /*Variables Globables*/
 
 long TAM;
+long TAM2;
 
 double rotate_y=0;  //Rotar la figura en Y
 double rotate_x=0;  //Rotar la figura en X
@@ -27,31 +28,34 @@ list<CVertice> v;   //Lista global de los vertices obtenidos del archivo obj
 list<CCara> c;      //Lista global de las caras obtenidas del archivo oj
 list<Punto> lCurva; //Lista global que contiene los puntos (x,y,z) del bezier
 CVertice* array;    //Arreglo de vertices //CVertice array[10000];
+CVertice* pista;
 Punto pivote;       //Punto pivote de la figura 
 bool bandera = true;
-
+list<CVertice> vEscenario;
+list<CCara> cEscenario;
+list<CVertice> copia;
 /*  Iluminacion */
 float LightPos[] = { 1.0f, 1.0f, 0.0f, 0.0f};   // Light Position
 float LightAmb[] = { 0.2f, 0.2f, 0.2f, 1.0f};   // Ambient Light Values
 float LightDif[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Diffuse Light Values
 float LightSpc[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Specular Light Values
 
-
+void specialKeys( int key, int x, int y ) ;
 /* Prototipos de funciones externas a la clase CGrafico */
 void display();
-void specialKeys( int key, int x, int y );
 void recorreBezier();
 void pintaBezier();
 void pintaFigura();
 void traslacionOrigen();
 void dameVertices(list<CVertice> vertices);
 CVertice multMatriz4x1(CVertice punto,Punto p);
-
 Punto rotacionX(float angulo, Punto actual);
 void rotacion();
 Punto damePivote();
 void calculaNormales();
+void calculaNormalesEscenario();
 void imprimeNormales();
+void pintaEscenario();
 
 class CGrafico{
     private:
@@ -61,8 +65,10 @@ class CGrafico{
     public:
         CGrafico();                 //Constructor
         void dameVertices(list<CVertice> vertices);
+        void dameVerticesEscenario(list<CVertice> vertices);
         void dameCaras(list<CCara> caras);
-        void pinta(int argc, char* argv[]);
+        void pinta(int argc, char* argv[],CGrafico escenario);
+        
         void generaBezier();
         
 };

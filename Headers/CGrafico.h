@@ -33,8 +33,9 @@ CVertice* array;    //Arreglo de vertices //CVertice array[10000];
 CVertice* pista;
 Punto pivote;       //Punto pivote de la figura 
 bool bandera = true;
-float cred = 0.0;
-float cgreen = 0.0;
+GLfloat cred = 0.0;
+GLfloat cgreen = 0.0;
+void pintaPlano();
 list<CVertice> vEscenario;
 list<CCara> cEscenario;
 list<CVertice> copia;
@@ -60,6 +61,7 @@ void calculaNormales();
 void calculaNormalesEscenario();
 void imprimeNormales();
 void pintaEscenario();
+void mouse(int button, int state, int x, int y);
 
 class CGrafico{
     private:

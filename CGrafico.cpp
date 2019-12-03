@@ -205,7 +205,7 @@ void display()
   if(bandera)
   {
     // pintaBezier();
-    recorreBezier();
+    // recorreBezier();
     bandera = false;
   }
   glFlush();
@@ -331,11 +331,11 @@ void recorreBezier()
       array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
     }
-  // pintaEscenario();  
-  pintaEscenario();  
+  // pintaEscenario();
+     
+    pintaEscenario();  
    
- pintaFigura();
-  
+    pintaFigura();
        
     
   }
@@ -437,6 +437,10 @@ void CGrafico::pinta(int argc, char* argv[],CGrafico escenario)
     copia = vertices;
     glutDisplayFunc(display);     //Llamada a la funcion display()
    glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
+   glClearColor(cred,cgreen,0.09,0.0);
+    pintaFigura();
+    pintaEscenario();
+    glutMouseFunc(mouse);
     glutMainLoop();
 
     
@@ -472,6 +476,27 @@ void specialKeys( int key, int x, int y )
 
 }
 
+
+void pintaPlano()
+{
+  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
+  glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+  glClearColor(cred,cgreen,0.09,0.0);
+  glBegin(GL_POLYGON);
+  glVertex3f(-0.982422 ,-0.062909 ,1.026510);
+  glVertex3f(1.017578 ,-0.062909, 1.026510);
+  glVertex3f(-0.982422, -0.062909, -0.973490);
+  glVertex3f(-1.0,-1.0,0.0);
+
+  glEnd();
+
+  glutSwapBuffers();
+  glFlush();
+
+}
+
 void pintaEscenario()
 {
 
@@ -486,7 +511,6 @@ void pintaEscenario()
 	GLfloat mat_diffuse[] = { 1.0, 0.7f, 0.0f, 0.0f };
 	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat mat_shininess[] = { 120.0f };
- 
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
@@ -507,6 +531,7 @@ void pintaEscenario()
     }
     glEnd(); 
   }
+  
 //   glFlush();
 //  glutSwapBuffers();
 
@@ -532,4 +557,33 @@ void CGrafico::generaBezier()
     curva.insert(curva.end(),p);
     t += 0.002;
   }
+}
+void mouse(int button, int state, int x, int y)
+{
+   // Wheel reports as button 3(scroll up) and button 4(scroll down)
+   if ((button == 3) || (button == 4)) // It's a wheel event
+   {
+       // Each wheel event reports like a button click, GLUT_DOWN then GLUT_UP
+       if (state == GLUT_UP)  // Disregard redundant GLUT_UP events
+       {
+         if(button == 3)
+         {
+            cred += 0.01;
+            cgreen +=0.01;
+         }
+         else if (button == 4)
+         {
+           cred -= 0.01;
+         cgreen -=0.01;
+         }
+       }
+       if (state == GLUT_DOWN)  // Disregard redundant GLUT_UP events
+       {
+         
+       }
+
+   }else{  // normal button event
+       printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
+   }
+   pintaPlano();
 }

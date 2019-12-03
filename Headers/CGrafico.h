@@ -22,6 +22,8 @@ long TAM2;
 
 double rotate_y=0;  //Rotar la figura en Y
 double rotate_x=0;  //Rotar la figura en X
+double scaleX = 0;
+double scaleY = 0;
 CBezier b1,b2,b3;   //Curvas bezier
 double t = 0;       //Variable auxiliar para realizacion del bezier
 list<CVertice> v;   //Lista global de los vertices obtenidos del archivo obj
@@ -31,6 +33,8 @@ CVertice* array;    //Arreglo de vertices //CVertice array[10000];
 CVertice* pista;
 Punto pivote;       //Punto pivote de la figura 
 bool bandera = true;
+float cred = 0.0;
+float cgreen = 0.0;
 list<CVertice> vEscenario;
 list<CCara> cEscenario;
 list<CVertice> copia;
@@ -44,7 +48,7 @@ void specialKeys( int key, int x, int y ) ;
 /* Prototipos de funciones externas a la clase CGrafico */
 void display();
 void recorreBezier();
-void pintaBezier();
+void mouse(int button, int state, int x, int y);
 void pintaFigura();
 void traslacionOrigen();
 void dameVertices(list<CVertice> vertices);

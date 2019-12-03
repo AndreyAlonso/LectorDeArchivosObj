@@ -268,8 +268,8 @@ glRotatef( rotate_y, 0.0, 1.0, 0.0 );
 	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat mat_shininess[] = { 120.0f };
  
-  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
+  // glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+  // glLoadIdentity();
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -507,8 +507,8 @@ void pintaEscenario()
     }
     glEnd(); 
   }
-  glFlush();
- glutSwapBuffers();
+//   glFlush();
+//  glutSwapBuffers();
 
 }
 

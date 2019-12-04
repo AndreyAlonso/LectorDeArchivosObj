@@ -197,21 +197,16 @@ void display()
 {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+
   glLightfv(GL_LIGHT0, GL_POSITION, LightPos);        // Set Light1 Position
   glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);         // Set Light1 Ambience
   glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);         // Set Light1 Diffuse
   glLightfv(GL_LIGHT0, GL_SPECULAR, LightSpc);        // Set Light1 Specular
+   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+  pintaEscenario();
+  pintaFigura();
 
-  if(bandera)
-  {
-    // pintaBezier();
-    // recorreBezier();
-    bandera = false;
-  }
-  glFlush();
-  glutSwapBuffers();
 }
 /**
  * Funcion pintaBezier()
@@ -264,15 +259,15 @@ void pintaFigura()
   glEnable(GL_LIGHTING);
   glEnable(GL_DEPTH_TEST);
   calculaNormales();
-	GLfloat mat_ambient[] = { 1.0,0.5,1.0,0.0 };
-	GLfloat mat_diffuse[] = { 1.0, 0.7f, 0.0f, 0.0f };
-	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat mat_ambient[] = { 204/100,0.0,0.0,1.0};
+	GLfloat mat_diffuse[] = {  204/100,0.0,0.0,1.0 };
+	GLfloat mat_specular[] = {  204/100,0.0,0.0,1.0 };
 	GLfloat mat_shininess[] = { 120.0f };
  
   // glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-   glLoadIdentity();
-   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+  glLoadIdentity();
+  glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -324,7 +319,6 @@ void rotacion()
  */
 void recorreBezier()
 { 
-  Punto rota;
   for(Punto pBezier : lCurva)
   {
     traslacionOrigen();
@@ -334,15 +328,10 @@ void recorreBezier()
       array[iPunto] = multMatriz4x1(array[iPunto],pBezier);
       glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
     }
-  // pintaEscenario();
-     
     pintaEscenario();  
-   
     pintaFigura();
-       
-    
+    // pintaPlano();
   }
-  
 }
 /**
  * Funcion damePivote()
@@ -372,11 +361,11 @@ void traslacionOrigen()
       array[i].y += pivote.y;
       array[i].z += pivote.z;
     }
-    for(int i =0; i < vEscenario.size(); i++)
+    for(int i =0; i < v.size(); i++)
     {
-      pista[i].x += (0.0 - pista[  cEscenario.front().VERTICES().front()  ].x);
-      pista[i].y += (0.0 - pista[  cEscenario.front().VERTICES().front()  ].y);
-      pista[i].z += (0.0 - pista[  cEscenario.front().VERTICES().front()  ].z);
+      array[i].x += (0.0 - array[  c.front().VERTICES().front()  ].x);
+      array[i].y += (0.0 - array[  c.front().VERTICES().front()  ].y);
+      array[i].z += (0.0 - array[  c.front().VERTICES().front()  ].z);
     }
 }
 
@@ -425,10 +414,11 @@ void CGrafico::pinta(int argc, char* argv[],CGrafico escenario)
     glutInitWindowSize( 800, 600);
     glShadeModel(GL_SMOOTH);
 
-    glutCreateWindow("Lector de Archivos WaveFront (.obj)");
+    glutCreateWindow("Animacion X-Wing");
 
     v = vertices; //Se guardan los vertices en una lista global
     c = caras;    //Se guardan las caras en una lista global
+    copia = v;
 
     vEscenario = escenario.vertices;
     cEscenario = escenario.caras;
@@ -455,14 +445,15 @@ void specialKeys( int key, int x, int y )
 {
 
   //  La flecha derecha: incrementa su rotación en 5 grados
-  if (key == GLUT_KEY_RIGHT)
-  {
-    rotate_y += 5;
+  
     v = copia;
     long j = 1;
     array = (CVertice*)malloc(sizeof(CVertice)*(copia.size()+1));
     for(CVertice cv: copia)
       array[j++] = cv; 
+  if (key == GLUT_KEY_RIGHT)
+  {
+    // rotate_y += 5;
     recorreBezier();
     
   }
@@ -475,9 +466,10 @@ void specialKeys( int key, int x, int y )
 
   else if (key == GLUT_KEY_DOWN)
     rotate_x -= 5;
+    v = copia;
   pintaEscenario();
   pintaFigura();
-  
+  //v = copia;
   //  Solicitud para actualizar la pantalla
   // glutPostRedisplay();
 
@@ -493,7 +485,7 @@ void pintaPlano()
   glClearColor(cred,cgreen,0.09,0.0);
   pintaEscenario();
   pintaFigura();
-
+  v = copia;
   glutSwapBuffers();
   glFlush();
 
@@ -501,28 +493,23 @@ void pintaPlano()
 
 void pintaEscenario()
 {
-
   glEnable(GL_LIGHT0);                                // Enable Light1
   glEnable(GL_LIGHTING);
   glEnable(GL_DEPTH_TEST);
- glEnable(GL_LIGHT0);                                // Enable Light1
-  glEnable(GL_LIGHTING);
-  glEnable(GL_DEPTH_TEST);
   calculaNormalesEscenario();
-	GLfloat mat_ambient[] = { 1.0,1.5,1.0,0.0 };
-	GLfloat mat_diffuse[] = { 1.0, 0.7f, 0.0f, 0.0f };
-	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat mat_shininess[] = { 120.0f };
+	GLfloat mat_ambient[] = { 192/100, 192/100,192/100, 1.0f };
+  GLfloat mat_diffuse[] = {192/100, 192/100,192/100, 1.0f };
+  GLfloat mat_specular[] = { 192/100, 192/100,192/100, 1.0f  };
+  GLfloat mat_shininess[] = { 128.0f };
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-    glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  
+  glRotatef( rotate_x, 1.0, 0.0, 0.0 );
   glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
-  // gluLookAt(0.0,0.6,-0.5,0.7,0.9,0.7,0.-0,5.0,0.0); 
   for(CCara caraFigura : cEscenario) //Se recorren todas las caras de la figura
   {
     glNormal3f(caraFigura.N.x,caraFigura.N.y,caraFigura.N.z);

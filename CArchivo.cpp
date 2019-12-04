@@ -92,7 +92,7 @@ long CArchivo::abreArchivo()
     if(vertices.empty() && faces.empty())
     {
         cout << "Todo listo" << endl;
-        abreArchivoEscenario("archivos/pio.obj");
+        abreArchivoEscenario("archivos/deathStar.obj");
     }
     
 

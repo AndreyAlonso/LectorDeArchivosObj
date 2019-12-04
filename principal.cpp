@@ -43,7 +43,7 @@ bool pideArchivo(){
 void menu(int argc, char* argv[])
 {
 
-    CArchivo archivo("patineta.obj");
+    CArchivo archivo("xwing.obj");
     if(archivo.abreArchivo() != -1){
         archivo.setGrafico().pinta(argc,argv,archivo.setEscenario());
     }

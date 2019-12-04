@@ -40,10 +40,11 @@ list<CVertice> vEscenario;
 list<CCara> cEscenario;
 list<CVertice> copia;
 /*  Iluminacion */
-float LightPos[] = { 1.0f, 1.0f, 0.0f, 0.0f};   // Light Position
+float LightPos[] = { 1.0f, 0.5f, 1.0f, 0.0f};   // Light Position
 float LightAmb[] = { 0.2f, 0.2f, 0.2f, 1.0f};   // Ambient Light Values
 float LightDif[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Diffuse Light Values
 float LightSpc[] = { 1.0f, 1.0f, 1.0f, 1.0f};   // Specular Light Values
+
 
 void specialKeys( int key, int x, int y ) ;
 /* Prototipos de funciones externas a la clase CGrafico */

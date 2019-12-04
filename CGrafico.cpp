@@ -17,6 +17,82 @@ CGrafico::CGrafico()
   lCurva = curva;
 }
 /**
+ * Metodo pinta(int argc, char *argv[])
+ * Se crea la ventana de OpenGL
+ * Se manda llamar a las funciones para interactuar con la ventana OpenGL
+ */
+void CGrafico::pinta(int argc, char* argv[],CGrafico escenario)
+{
+    long j = 1;
+    glutInit(&argc,argv);   
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowPosition(400,0);
+    glutInitWindowSize( 800, 600);
+    glShadeModel(GL_SMOOTH);
+
+    glutCreateWindow("Animacion X-Wing");
+
+    v = vertices; //Se guardan los vertices en una lista global
+    c = caras;    //Se guardan las caras en una lista global
+    copia = v;    //Se genera una copia de los vertices de la figura
+
+    vEscenario = escenario.vertices;
+    cEscenario = escenario.caras;
+    
+    pista = (CVertice*)malloc(sizeof(CVertice)*(vEscenario.size()+1));
+    for(CVertice cv: vEscenario)
+      pista[j++] = cv; 
+    calculaNormales();
+    copia = vertices;
+   
+    glClearColor(cred,cgreen,0.09,0.0);
+    pintaFigura();
+    pintaEscenario();
+    glutDisplayFunc(display);     //Llamada a la funcion display()
+    glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
+    glutMouseFunc(mouse);           
+    glutMainLoop();
+
+    
+}
+/**
+ * Funcion pintaFigura()
+ * 
+ * Se muestra en pantalla la figura
+ * aplicando la rotación y traslación
+ */
+void pintaFigura()
+{
+    glEnable(GL_LIGHT0);                               
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    calculaNormales();
+	GLfloat mat_ambient[] = { 204/100,0.0,0.0,1.0};
+	GLfloat mat_diffuse[] = {  204/100,0.0,0.0,1.0 };
+	GLfloat mat_specular[] = {  204/100,0.0,0.0,1.0 };
+	GLfloat mat_shininess[] = { 120.0f };
+    glLoadIdentity();
+    glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+    glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    
+    for(CCara caraFigura : c) //Se recorren todas las caras de la figura
+    {
+        glBegin(GL_POLYGON);
+        glNormal3f(caraFigura.N.x,caraFigura.N.y,caraFigura.N.z);
+        for(int iPunto : caraFigura.VERTICES())
+        {      
+            glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z);  
+        }
+        glEnd(); 
+    }
+    glFlush();
+    glutSwapBuffers();
+}
+/**
  * Metodo dameVertices(list<CVertice> vertices)
  * @vertices: lista de vertices obtenidas del archivo
  */
@@ -24,11 +100,9 @@ void CGrafico::dameVertices(list<CVertice> vertices)
 {
   long j = 1;
   this->vertices = vertices;
-  //array[vertices.size()];
   array = (CVertice*)malloc(sizeof(CVertice)*(vertices.size()+1));
   for(CVertice cv: vertices)   //Se guarda en un arreglo los vertices para poder pintarlos
     array[j++] = cv; 
-  
   TAM = j;
   
 }
@@ -41,8 +115,6 @@ void CGrafico::dameVerticesEscenario(list<CVertice> vertices)
   pista = (CVertice*)malloc(sizeof(CVertice)*(vertices.size()+1));
   for(CVertice cv: vertices)   //Se guarda en un arreglo los vertices para poder pintarlos
     pista[j++] = cv; 
-
-  
 }
 
 /**
@@ -245,51 +317,7 @@ Punto rotacionX(float angulo, Punto actual)
   
 }
 
-/**
- * Funcion pintaFigura()
- * 
- * Se muestra en pantalla la figura
- * aplicando la rotación y traslación
- */
-void pintaFigura()
-{
-       
 
-  glEnable(GL_LIGHT0);                                // Enable Light1
-  glEnable(GL_LIGHTING);
-  glEnable(GL_DEPTH_TEST);
-  calculaNormales();
-	GLfloat mat_ambient[] = { 204/100,0.0,0.0,1.0};
-	GLfloat mat_diffuse[] = {  204/100,0.0,0.0,1.0 };
-	GLfloat mat_specular[] = {  204/100,0.0,0.0,1.0 };
-	GLfloat mat_shininess[] = { 120.0f };
- 
-  // glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
-  glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
-  glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-  
-  // gluLookAt(0.5,0.2,0.2,    // EYE X, Y, Z
-  //           0.0,-0.2,0.7,    // LOOK
-  //           0.0,0.6,0.2);  // UP
-  for(CCara caraFigura : c) //Se recorren todas las caras de la figura
-  {
-    glBegin(GL_POLYGON);
-    glNormal3f(caraFigura.N.x,caraFigura.N.y,caraFigura.N.z);
-    for(int iPunto : caraFigura.VERTICES())
-    {      
-      glVertex3f(array[iPunto].x,array[iPunto].y,array[iPunto].z); 
-      
-    }
-    glEnd(); 
-  }
-  glFlush();
-  glutSwapBuffers();
-}
 /***
  * Funcion rotacion()
  * Aplicando la mutliplicacion de matrices
@@ -401,77 +429,31 @@ CVertice multMatriz4x1(CVertice punto,Punto p)
   return nuevo;
   
 }
-/**
- * Metodo pinta(int argc, char *argv[])
- * Se crea la ventana de OpenGL
- * Se manda llamar a las funciones para interactuar con la ventana OpenGL
- */
-void CGrafico::pinta(int argc, char* argv[],CGrafico escenario)
-{
-    glutInit(&argc,argv);   
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(400,0);
-    glutInitWindowSize( 800, 600);
-    glShadeModel(GL_SMOOTH);
 
-    glutCreateWindow("Animacion X-Wing");
-
-    v = vertices; //Se guardan los vertices en una lista global
-    c = caras;    //Se guardan las caras en una lista global
-    copia = v;
-
-    vEscenario = escenario.vertices;
-    cEscenario = escenario.caras;
-    long j = 1;
-    pista = (CVertice*)malloc(sizeof(CVertice)*(vEscenario.size()+1));
-    for(CVertice cv: vEscenario)
-      pista[j++] = cv; 
-    calculaNormales();
-    copia = vertices;
-   
-    glClearColor(cred,cgreen,0.09,0.0);
-    pintaFigura();
-    pintaEscenario();
-    glutDisplayFunc(display);     //Llamada a la funcion display()
-    glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
-    
-   
-    glutMouseFunc(mouse);
-    glutMainLoop();
-
-    
-}
 void specialKeys( int key, int x, int y ) 
-{
-
-  //  La flecha derecha: incrementa su rotación en 5 grados
-  
+{  
     v = copia;
     long j = 1;
     array = (CVertice*)malloc(sizeof(CVertice)*(copia.size()+1));
     for(CVertice cv: copia)
       array[j++] = cv; 
-  if (key == GLUT_KEY_RIGHT)
-  {
-    // rotate_y += 5;
-    recorreBezier();
-    
-  }
-  //  La flecha izquierda: disminuye su rotación en 5 grados
-  else if (key == GLUT_KEY_LEFT)
-    rotate_y -= 5;
+    if (key == GLUT_KEY_RIGHT)
+    {
+        recorreBezier();
+        
+    }
+    else if (key == GLUT_KEY_LEFT)
+        rotate_y -= 5;
 
-  else if (key == GLUT_KEY_UP)
-    rotate_x += 5;
+    else if (key == GLUT_KEY_UP)
+        rotate_x += 5;
 
-  else if (key == GLUT_KEY_DOWN)
-    rotate_x -= 5;
-    v = copia;
-  pintaEscenario();
-  pintaFigura();
-  //v = copia;
-  //  Solicitud para actualizar la pantalla
-  // glutPostRedisplay();
+    else if (key == GLUT_KEY_DOWN)
+        rotate_x -= 5;
+        v = copia;
+    pintaEscenario();
+    pintaFigura();
+
 
 }
 

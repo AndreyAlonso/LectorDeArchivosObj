@@ -92,7 +92,7 @@ long CArchivo::abreArchivo()
     if(vertices.empty() && faces.empty())
     {
         cout << "Todo listo" << endl;
-        abreArchivoEscenario("archivos/piramide.obj");
+        abreArchivoEscenario("archivos/pio.obj");
     }
     
 

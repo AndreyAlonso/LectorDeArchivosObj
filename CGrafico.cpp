@@ -197,6 +197,8 @@ void display()
 {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glLightfv(GL_LIGHT0, GL_POSITION, LightPos);        // Set Light1 Position
   glLightfv(GL_LIGHT0, GL_AMBIENT, LightAmb);         // Set Light1 Ambience
   glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDif);         // Set Light1 Diffuse
@@ -256,8 +258,7 @@ Punto rotacionX(float angulo, Punto actual)
  */
 void pintaFigura()
 {
-        glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-glRotatef( rotate_y, 0.0, 1.0, 0.0 );
+       
 
   glEnable(GL_LIGHT0);                                // Enable Light1
   glEnable(GL_LIGHTING);
@@ -269,7 +270,9 @@ glRotatef( rotate_y, 0.0, 1.0, 0.0 );
 	GLfloat mat_shininess[] = { 120.0f };
  
   // glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-  // glLoadIdentity();
+   glLoadIdentity();
+   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -435,11 +438,14 @@ void CGrafico::pinta(int argc, char* argv[],CGrafico escenario)
       pista[j++] = cv; 
     calculaNormales();
     copia = vertices;
-    glutDisplayFunc(display);     //Llamada a la funcion display()
-   glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
-   glClearColor(cred,cgreen,0.09,0.0);
+   
+    glClearColor(cred,cgreen,0.09,0.0);
     pintaFigura();
     pintaEscenario();
+    glutDisplayFunc(display);     //Llamada a la funcion display()
+    glutSpecialFunc(specialKeys); //Llamada a la funcion specialKey()
+    
+   
     glutMouseFunc(mouse);
     glutMainLoop();
 
@@ -460,7 +466,6 @@ void specialKeys( int key, int x, int y )
     recorreBezier();
     
   }
-
   //  La flecha izquierda: disminuye su rotación en 5 grados
   else if (key == GLUT_KEY_LEFT)
     rotate_y -= 5;
@@ -470,9 +475,11 @@ void specialKeys( int key, int x, int y )
 
   else if (key == GLUT_KEY_DOWN)
     rotate_x -= 5;
-    
+  pintaEscenario();
+  pintaFigura();
+  
   //  Solicitud para actualizar la pantalla
-  glutPostRedisplay();
+  // glutPostRedisplay();
 
 }
 
@@ -484,13 +491,8 @@ void pintaPlano()
   glRotatef( rotate_x, 1.0, 0.0, 0.0 );
   glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glClearColor(cred,cgreen,0.09,0.0);
-  glBegin(GL_POLYGON);
-  glVertex3f(-0.982422 ,-0.062909 ,1.026510);
-  glVertex3f(1.017578 ,-0.062909, 1.026510);
-  glVertex3f(-0.982422, -0.062909, -0.973490);
-  glVertex3f(-1.0,-1.0,0.0);
-
-  glEnd();
+  pintaEscenario();
+  pintaFigura();
 
   glutSwapBuffers();
   glFlush();
@@ -513,6 +515,8 @@ void pintaEscenario()
 	GLfloat mat_shininess[] = { 120.0f };
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+    glRotatef( rotate_x, 1.0, 0.0, 0.0 );
+  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
   glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -585,5 +589,8 @@ void mouse(int button, int state, int x, int y)
    }else{  // normal button event
        printf("Button %s At %d %d\n", (state == GLUT_DOWN) ? "Down" : "Up", x, y);
    }
+   
+   pintaEscenario();
+   pintaFigura();
    pintaPlano();
 }
